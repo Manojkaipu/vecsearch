@@ -46,7 +46,7 @@ jobs:
       - name: Smoke test
         run: make smoke smoke-dist PY=python
       - uses: actions/upload-artifact@v4
-        with: { name: smoke-results-${{ matrix.python }}, path: results/smoke }
+        with: { name: "smoke-results-${{ matrix.python }}", path: results/smoke }
 
   docker:
     runs-on: ubuntu-24.04
