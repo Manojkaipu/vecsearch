@@ -1,0 +1,15 @@
+# 4 shards + coordinator on localhost:50050. Build the index first:
+#   python distributed/build_shards.py --data data/tweets --shards 4 --out indexes/tweets_4shards
+x-shard: &shard
+  image: vecsearch
+  volumes: ["./indexes:/app/indexes:ro"]
+services:
+  shard0: { <<: *shard, command: [python, distributed/shard_worker.py, --manifest, /app/indexes/tweets_4shards/manifest.json, --port, "50100", --shard-id, "0"] }
+  shard1: { <<: *shard, command: [python, distributed/shard_worker.py, --manifest, /app/indexes/tweets_4shards/manifest.json, --port, "50100", --shard-id, "1"] }
+  shard2: { <<: *shard, command: [python, distributed/shard_worker.py, --manifest, /app/indexes/tweets_4shards/manifest.json, --port, "50100", --shard-id, "2"] }
+  shard3: { <<: *shard, command: [python, distributed/shard_worker.py, --manifest, /app/indexes/tweets_4shards/manifest.json, --port, "50100", --shard-id, "3"] }
+  coordinator:
+    image: vecsearch
+    command: [python, distributed/coordinator.py, --workers, "shard0:50100,shard1:50100,shard2:50100,shard3:50100", --port, "50050"]
+    ports: ["50050:50050"]
+    depends_on: [shard0, shard1, shard2, shard3]

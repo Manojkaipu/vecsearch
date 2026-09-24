@@ -1,0 +1,23 @@
+[build-system]
+requires = ["scikit-build-core>=0.9", "pybind11>=2.12"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "vecsearch"
+version = "0.1.0"
+description = "HNSW approximate nearest-neighbor search in C++ with Python bindings"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.23"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.scikit-build]
+wheel.packages = ["python/vecsearch"]
+cmake.build-type = "Release"
+build-dir = "build/{wheel_tag}"
+
+[tool.scikit-build.cmake.define]
+VECSEARCH_BUILD_PYTHON = "ON"
+VECSEARCH_BUILD_TESTS = "OFF"

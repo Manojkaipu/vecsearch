@@ -1,0 +1,7 @@
+build/
+data/
+indexes/
+results/
+.git/
+**/__pycache__/
+distributed/search_pb2*.py

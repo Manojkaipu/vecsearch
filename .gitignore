@@ -1,0 +1,11 @@
+build/
+data/
+indexes/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+distributed/search_pb2*.py
+*.so
+.venv/
+.claude/
+twcs.csv

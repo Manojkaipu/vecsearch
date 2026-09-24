@@ -1,0 +1,56 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+
+jobs:
+  cpp:
+    name: C++ ${{ matrix.compiler }} ${{ matrix.mode }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [g++, clang++]
+        mode: [release, asan, tsan]
+        exclude:
+          - { compiler: clang++, mode: tsan }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lower ASLR entropy for TSan
+        if: matrix.mode == 'tsan'
+        run: sudo sysctl vm.mmap_rnd_bits=28
+      - name: Configure
+        run: |
+          case "${{ matrix.mode }}" in
+            asan) FLAGS="-DCMAKE_BUILD_TYPE=Debug -DVECSEARCH_SANITIZE=ON" ;;
+            tsan) FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo -DVECSEARCH_TSAN=ON" ;;
+            *)    FLAGS="-DCMAKE_BUILD_TYPE=Release" ;;
+          esac
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} -DVECSEARCH_ARCH=x86-64-v3 $FLAGS
+      - run: cmake --build build -j
+      - run: ctest --test-dir build --output-on-failure
+
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix: { python: ["3.10", "3.12"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}", cache: pip }
+      - name: Install
+        env: { CMAKE_ARGS: "-DVECSEARCH_ARCH=x86-64-v3" }
+        run: pip install . -r requirements-bench.txt
+      - run: python -m pytest tests/python -q
+      - name: Smoke test
+        run: make smoke smoke-dist PY=python
+      - uses: actions/upload-artifact@v4
+        with: { name: smoke-results-${{ matrix.python }}, path: results/smoke }
+
+  docker:
+    runs-on: ubuntu-24.04
+    needs: [cpp, python]
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t vecsearch .

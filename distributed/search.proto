@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package vecsearch;
+
+// Implemented by both shard workers and the coordinator.
+service Searcher {
+  rpc Search(SearchRequest) returns (SearchResponse);
+  rpc Info(InfoRequest) returns (InfoResponse);
+}
+
+message SearchRequest {
+  bytes query = 1;  // little-endian float32[dim]
+  int32 k = 2;
+  int32 ef = 3;
+}
+
+message SearchResponse {
+  repeated int64 ids = 1;              // global ids
+  repeated float distances = 2;        // ascending
+  map<string, double> timings_ms = 3;  // per shard
+}
+
+message InfoRequest {}
+message InfoResponse {
+  int64 num_vectors = 1;
+  int32 dim = 2;
+  int32 num_shards = 3;
+}
