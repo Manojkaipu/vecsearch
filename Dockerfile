@@ -7,14 +7,14 @@ COPY . .
 RUN cmake -S . -B build -DVECSEARCH_ARCH=x86-64-v3 && cmake --build build -j \
     && ctest --test-dir build --output-on-failure
 ENV CMAKE_ARGS="-DVECSEARCH_ARCH=x86-64-v3"
-RUN pip wheel --no-deps -w /wheels .
+# hnswlib ships no wheels, so every dependency is built here where a compiler exists
+RUN pip wheel -w /wheels . -r requirements-bench.txt
 
 FROM python:3.11-slim
 WORKDIR /app
 COPY requirements-bench.txt .
-RUN pip install --no-cache-dir -r requirements-bench.txt
-COPY --from=build /wheels /wheels
-RUN pip install --no-cache-dir /wheels/*.whl
+RUN --mount=type=bind,from=build,source=/wheels,target=/wheels \
+    pip install --no-cache-dir --no-index --find-links /wheels -r requirements-bench.txt vecsearch
 COPY bench bench
 COPY distributed distributed
 COPY tests/python tests/python
