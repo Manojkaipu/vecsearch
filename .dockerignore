@@ -3,5 +3,7 @@ data/
 indexes/
 results/
 .git/
+.venv/
+twcs.csv
 **/__pycache__/
 distributed/search_pb2*.py
