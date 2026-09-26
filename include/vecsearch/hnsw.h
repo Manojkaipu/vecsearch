@@ -22,6 +22,16 @@ struct HNSWParams {
   bool use_heuristic = true;  // false: keep the M closest (ablation only)
 };
 
+// Restricts results to ids with allowed[id] != 0. Filtered-out nodes are still
+// traversed, so the graph stays connected. When few ids pass, filling ef slots
+// would visit most of the graph, so at or below exact_below allowed ids the
+// search scans them exactly instead.
+struct SearchFilter {
+  const uint8_t* allowed = nullptr;  // length >= size(); nullptr = no filter
+  size_t n_allowed = 0;              // count of nonzero entries in allowed
+  size_t exact_below = 0;
+};
+
 class VisitedPool;  // defined in hnsw.cpp
 
 class HNSWIndex {
@@ -39,11 +49,13 @@ class HNSWIndex {
   void add(const float* data, size_t n, int num_threads = 1);
 
   // Sorted by ascending distance.
-  std::vector<Neighbor> search(const float* query, size_t k, size_t ef) const;
+  std::vector<Neighbor> search(const float* query, size_t k, size_t ef,
+                               const SearchFilter& filter = {}) const;
 
   // Outputs are nq x k; unfilled slots get id=kNone, dist=+inf.
   void search_batch(const float* queries, size_t nq, size_t k, size_t ef,
-                    uint32_t* out_ids, float* out_dists, int num_threads = 1) const;
+                    uint32_t* out_ids, float* out_dists, int num_threads = 1,
+                    const SearchFilter& filter = {}) const;
 
   void save(const std::string& path) const;
   static std::unique_ptr<HNSWIndex> load(const std::string& path, size_t extra_capacity = 0);
@@ -71,7 +83,8 @@ class HNSWIndex {
   uint32_t greedy_descend(const float* q, uint32_t ep, int from_level, int to_level,
                           bool lock) const;
   std::vector<Neighbor> search_layer(const float* q, uint32_t ep, size_t ef, int level,
-                                     bool lock) const;
+                                     bool lock, const uint8_t* allowed = nullptr) const;
+  std::vector<Neighbor> search_exact(const float* q, size_t k, const uint8_t* allowed) const;
   std::vector<Neighbor> select_neighbors(const std::vector<Neighbor>& sorted_cands,
                                          size_t M) const;
 

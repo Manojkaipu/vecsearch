@@ -57,3 +57,41 @@ def test_missing_results_are_minus_one():
     h.add(np.eye(4, dtype=np.float32))
     ids, d = h.search(np.ones(4, np.float32), k=6)
     assert (ids[0, 4:] == -1).all() and np.isinf(d[0, 4:]).all()
+
+
+def test_hnsw_filter(data):
+    x, q = data
+    h = vs.HNSWIndex(64, len(x))
+    h.add(x)
+    mask = np.zeros(len(x), bool)
+    mask[::3] = True
+    ids, _ = h.search(q, k=10, ef=100, filter=mask)
+    assert mask[ids].all()
+    exact, _ = h.search(q, k=10, filter=mask, exact_below=len(x))
+    bf = vs.BruteForceIndex(64)
+    bf.add(x[mask])
+    gt, _ = bf.search(q, k=10)
+    assert np.array_equal(exact, np.flatnonzero(mask)[gt])
+    with pytest.raises(ValueError):
+        h.search(q, filter=np.ones(5, bool))
+
+
+def test_bm25_roundtrip(tmp_path):
+    docs = ["iPhone battery drains after update", "refund for cancelled flight",
+            "battery replacement cost", "app crashes on launch"]
+    idx = vs.BM25Index()
+    idx.add(docs)
+    assert len(idx) == 4 and vs.BM25Index.tokenize("It's the iOS-11 update") == ["ios", "11", "update"]
+    ids, scores = idx.search("battery", k=3)
+    assert set(ids[0, :2]) == {0, 2} and ids[0, 2] == -1 and (np.diff(scores[0, :2]) <= 0).all()
+    ids, _ = idx.search(["battery", "refund"], k=1, filter=np.array([0, 1, 1, 1], bool))
+    assert ids[:, 0].tolist() == [2, 1]
+    p = str(tmp_path / "bm25.bin")
+    idx.save(p)
+    assert np.array_equal(vs.BM25Index.load(p).search("battery", k=3)[0], idx.search("battery", k=3)[0])
+
+
+def test_rrf():
+    ids, scores = vs.rrf([[1, 2, 3], [3, 1, -1]], k=3)
+    assert ids == [1, 3, 2]  # 1: 1/61+1/62, 3: 1/63+1/61, 2: 1/62
+    assert scores[0] > scores[1] > scores[2]

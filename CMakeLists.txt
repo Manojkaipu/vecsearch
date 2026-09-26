@@ -15,7 +15,7 @@ option(VECSEARCH_TSAN         "Build with ThreadSanitizer" OFF)
 
 find_package(Threads REQUIRED)
 
-add_library(vecsearch_core STATIC src/hnsw.cpp src/brute_force.cpp)
+add_library(vecsearch_core STATIC src/hnsw.cpp src/brute_force.cpp src/bm25.cpp)
 target_include_directories(vecsearch_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(vecsearch_core PUBLIC Threads::Threads)
 set_target_properties(vecsearch_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -53,7 +53,9 @@ if(VECSEARCH_BUILD_TESTS)
   add_executable(vecsearch_tests
     tests/cpp/test_distance.cpp
     tests/cpp/test_brute_force.cpp
-    tests/cpp/test_hnsw.cpp)
+    tests/cpp/test_hnsw.cpp
+    tests/cpp/test_bm25.cpp
+    tests/cpp/test_filter.cpp)
   target_link_libraries(vecsearch_tests PRIVATE vecsearch_core GTest::gtest_main)
   include(GoogleTest)
   gtest_discover_tests(vecsearch_tests)

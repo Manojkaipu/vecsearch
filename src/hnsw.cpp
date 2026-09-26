@@ -172,9 +172,10 @@ uint32_t HNSWIndex::greedy_descend(const float* q, uint32_t ep, int from_level, 
 }
 
 // Algorithm 2. Stops once the nearest unexpanded candidate is farther than the
-// worst of the ef results.
+// worst of the ef results. With a filter, rejected nodes are still expanded but
+// never enter the results.
 std::vector<Neighbor> HNSWIndex::search_layer(const float* q, uint32_t ep, size_t ef, int level,
-                                              bool lock) const {
+                                              bool lock, const uint8_t* allowed) const {
   VisitedGuard vg(*visited_);
   VisitedList& vis = *vg.list;
 
@@ -186,12 +187,12 @@ std::vector<Neighbor> HNSWIndex::search_layer(const float* q, uint32_t ep, size_
   float d0 = dist(q, vector(ep));
   vis.check_and_mark(ep);
   cand.push_back({d0, ep});
-  res.push_back({d0, ep});
+  if (!allowed || allowed[ep]) res.push_back({d0, ep});
 
   std::vector<uint32_t> buf(M0_);
   while (!cand.empty()) {
     Neighbor c = cand.front();
-    if (c.dist > res.front().dist && res.size() >= ef) break;
+    if (res.size() >= ef && c.dist > res.front().dist) break;
     std::pop_heap(cand.begin(), cand.end(), minh);
     cand.pop_back();
 
@@ -206,6 +207,7 @@ std::vector<Neighbor> HNSWIndex::search_layer(const float* q, uint32_t ep, size_
       if (res.size() < ef || d < res.front().dist) {
         cand.push_back({d, nb});
         std::push_heap(cand.begin(), cand.end(), minh);
+        if (allowed && !allowed[nb]) continue;
         res.push_back({d, nb});
         std::push_heap(res.begin(), res.end());
         if (res.size() > ef) {
@@ -317,19 +319,45 @@ void HNSWIndex::add(const float* data, size_t n, int num_threads) {
 }
 
 // Algorithm 5.
-std::vector<Neighbor> HNSWIndex::search(const float* q, size_t k, size_t ef) const {
+std::vector<Neighbor> HNSWIndex::search(const float* q, size_t k, size_t ef,
+                                        const SearchFilter& filter) const {
   if (entry_point_ == kNone || k == 0) return {};
+  if (filter.allowed) {
+    if (filter.n_allowed == 0) return {};
+    if (filter.n_allowed <= filter.exact_below) return search_exact(q, k, filter.allowed);
+  }
   ef = std::max(ef, k);
   uint32_t ep = greedy_descend(q, entry_point_, max_level_, 0, false);
-  std::vector<Neighbor> res = search_layer(q, ep, ef, 0, false);
+  std::vector<Neighbor> res = search_layer(q, ep, ef, 0, false, filter.allowed);
   if (res.size() > k) res.resize(k);
   return res;
 }
 
+std::vector<Neighbor> HNSWIndex::search_exact(const float* q, size_t k,
+                                              const uint8_t* allowed) const {
+  std::vector<Neighbor> heap;  // max-heap of the k best
+  const size_t n = size();
+  for (size_t i = 0; i < n; ++i) {
+    if (!allowed[i]) continue;
+    Neighbor c{dist(q, vector(uint32_t(i))), uint32_t(i)};
+    if (heap.size() < k) {
+      heap.push_back(c);
+      std::push_heap(heap.begin(), heap.end());
+    } else if (c.dist < heap.front().dist) {
+      std::pop_heap(heap.begin(), heap.end());
+      heap.back() = c;
+      std::push_heap(heap.begin(), heap.end());
+    }
+  }
+  std::sort_heap(heap.begin(), heap.end());
+  return heap;
+}
+
 void HNSWIndex::search_batch(const float* queries, size_t nq, size_t k, size_t ef,
-                             uint32_t* out_ids, float* out_dists, int num_threads) const {
+                             uint32_t* out_ids, float* out_dists, int num_threads,
+                             const SearchFilter& filter) const {
   parallel_for(0, nq, num_threads, [&](size_t i) {
-    std::vector<Neighbor> r = search(queries + i * dim_, k, ef);
+    std::vector<Neighbor> r = search(queries + i * dim_, k, ef, filter);
     for (size_t j = 0; j < k; ++j) {
       out_ids[i * k + j] = j < r.size() ? r[j].id : kNone;
       out_dists[i * k + j] = j < r.size() ? r[j].dist : std::numeric_limits<float>::infinity();
