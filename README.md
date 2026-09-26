@@ -1,6 +1,6 @@
 # vecsearch — HNSW vector search in C++, benchmarked against FAISS and ScaNN
 
-HNSW (Hierarchical Navigable Small World) graphs in C++17 with pybind11 bindings, benchmarked on 1M customer-support tweet embeddings against hnswlib, FAISS and ScaNN, and served as a sharded gRPC service.
+HNSW (Hierarchical Navigable Small World) graphs in C++17 with pybind11 bindings, benchmarked on 1M customer-support tweet embeddings against hnswlib, FAISS and ScaNN, and served as a sharded gRPC service. Also includes a BM25 inverted index, filtered graph search and reciprocal rank fusion for hybrid retrieval.
 
 [![CI](https://github.com/Manojkaipu/vecsearch/actions/workflows/ci.yml/badge.svg)](https://github.com/Manojkaipu/vecsearch/actions/workflows/ci.yml)
 
@@ -41,6 +41,35 @@ Recall@10 at ef=64:
 * **M:** 8 gives 0.915, 16 gives 0.964, and 32 gives 0.977. Going from 8 to 32 roughly doubles build time and lowers QPS at each ef.
 * **ef_construction:** going from 50 to 400 raises recall from 0.924 to 0.969, and build time grows roughly in proportion. The gain above 200 is small.
 
+### Filtered and hybrid search
+
+Measured in support-rag, a question-answering system built on this library, over 892,800 conversation chunks from the same tweet corpus (M=16, ef=128, k=10, one thread). Each row filters to one company's chunks. Recall is against exact search over just the allowed chunks.
+
+| allowed chunks | post-filter recall | in-graph recall | in-graph p50 / p99 | exact scan p50 |
+|---|---|---|---|---|
+| 105,998 (11.9%) | 0.980 | 0.983 | 0.46 / 14.1 ms | 11.6 ms |
+| 17,287 (1.9%) | 0.995 | 0.995 | 0.38 / 1.0 ms | 2.7 ms |
+| 3,732 (0.42%) | 0.978 | 0.996 | 0.30 / 4.4 ms | 0.62 ms |
+| 1,663 (0.19%) | 0.919 | 0.992 | 1.9 / 40.6 ms | 0.39 ms |
+| 166 (0.02%) | 0.814 | 0.999 | 43.9 / 432 ms | 0.25 ms |
+| 127 (0.01%) | 0.880 | 1.000 | 672 / 754 ms | 0.24 ms |
+
+* **Post-filtering** (search unfiltered for 10x as many results, then drop the rest) is what you get from any ANN library without filter support. It loses up to 19% recall on small companies.
+* **In-graph filtering** keeps recall high at every selectivity. Filtered-out nodes are still walked through, so the graph stays connected. But below about 0.2% of the corpus, the search visits most of the graph before it finds ten allowed nodes.
+* **Exact scan** of the allowed ids wins below a few thousand chunks. `search(..., exact_below=n)` switches to it automatically. With n=5,000 here, all ten companies tested (0.01% to 12% of the corpus) get recall ≥ 0.975 and p50 ≤ 0.62 ms.
+
+On support-rag's 86 hand-reviewed questions, fusing BM25 and vector results with RRF finds the source conversation in the top 10 for 65% of questions. That compares with 55% for vector search and 50% for BM25 alone.
+
+```python
+import vecsearch as vs
+
+bm25 = vs.BM25Index()                        # Okapi BM25, Lucene idf, UTF-8-safe tokenizer
+bm25.add(texts)
+ids_b, _ = bm25.search("battery drains after update", k=100, filter=mask)
+ids_v, _ = hnsw.search(query_vec, k=100, ef=128, filter=mask, exact_below=5000)
+top, scores = vs.rrf([ids_v[0], ids_b[0]], k=10)
+```
+
 ## Architecture
 
 ```mermaid
@@ -56,7 +85,7 @@ flowchart LR
 
 | layer | files |
 |---|---|
-| C++ core | `include/vecsearch/{distance,brute_force,hnsw}.h`, `src/*.cpp` |
+| C++ core | `include/vecsearch/{distance,brute_force,hnsw,bm25}.h`, `src/*.cpp` |
 | Python bindings | `python/bindings.cpp`, `python/vecsearch/` (GIL released during build/search) |
 | Benchmarks | `bench/prepare_data.py → ground_truth.py → run_benchmarks.py → plot.py`, `bench/ablation.py` |
 | Distributed | `distributed/search.proto`, `build_shards.py`, `shard_worker.py`, `coordinator.py`, `cluster.py`, `latency_bench.py` |
@@ -69,6 +98,8 @@ flowchart LR
 * **Insert:** descend to the new node's level, then on each of its layers run a beam search with `ef_construction`. Neighbors are picked with the diversity heuristic from the paper (Algorithm 4), links go both ways, and any neighbor that overflows is re-pruned.
 * **Performance:** AVX2/FMA distance kernels with a scalar fallback, epoch-tagged visited lists pooled across threads, and flat `uint32` adjacency for layer 0.
 * **Parallel build:** one mutex per node, and never two locks held at once. TSan runs in CI.
+* **Filters:** a byte mask over ids. Search still expands rejected nodes but never returns them. At or below `exact_below` allowed ids it scans them exactly instead.
+* **BM25:** postings are stored per term in doc-id order and scored term-at-a-time into a per-thread accumulator. Only the touched entries are reset, so a query never clears a 900k-entry array. Scores are tested against a direct transcription of the formula.
 * **Correctness:** recall is always measured against exact search. `BruteForceIndex` is itself cross-checked against FAISS `IndexFlatIP`.
 
 ## Reproduce
