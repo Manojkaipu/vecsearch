@@ -58,6 +58,18 @@ TEST(BM25, Tokenizer) {
   EXPECT_EQ(BM25Index::tokenize("It is THE app", false),
             (std::vector<std::string>{"it", "is", "the", "app"}));
   EXPECT_TRUE(BM25Index::tokenize("a I , . !").empty());
+  // one-character tokens carry meaning ("Level 3", "iPhone X"); contraction fragments don't
+  EXPECT_EQ(BM25Index::tokenize("Level 3 outage on my iPhone X, I'm sure it's down"),
+            (std::vector<std::string>{"level", "3", "outage", "my", "iphone", "x", "sure", "down"}));
+  EXPECT_EQ(BM25Index::tokenize("I'm a b", false), (std::vector<std::string>{"i", "m", "a", "b"}));
+}
+
+TEST(BM25, SingleCharacterTermsAreSearchable) {
+  BM25Index idx;
+  idx.add({"known issue with Level 3 earlier", "level of service", "Level 4 support"});
+  auto r = idx.search("Level 3 outage", 10);
+  ASSERT_FALSE(r.empty());
+  EXPECT_EQ(r[0].id, 0u);  // "3" separates it from the other "level" docs
 }
 
 TEST(BM25, ScoresMatchReference) {

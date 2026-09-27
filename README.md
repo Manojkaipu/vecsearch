@@ -58,7 +58,7 @@ Measured in support-rag, a question-answering system built on this library, over
 * **In-graph filtering** keeps recall high at every selectivity. Filtered-out nodes are still walked through, so the graph stays connected. But below about 0.2% of the corpus, the search visits most of the graph before it finds ten allowed nodes.
 * **Exact scan** of the allowed ids wins below a few thousand chunks. `search(..., exact_below=n)` switches to it automatically. With n=5,000 here, all ten companies tested (0.01% to 12% of the corpus) get recall ≥ 0.975 and p50 ≤ 0.62 ms.
 
-On support-rag's 86 hand-reviewed questions, fusing BM25 and vector results with RRF finds the source conversation in the top 10 for 65% of questions. That compares with 55% for vector search and 50% for BM25 alone.
+On support-rag's 86 hand-reviewed questions, fusing BM25 and vector results with RRF finds the source conversation in the top 10 for 66% of questions. That compares with 55% for vector search and 50% for BM25 alone.
 
 ```python
 import vecsearch as vs

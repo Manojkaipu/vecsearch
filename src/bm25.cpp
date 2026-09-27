@@ -11,13 +11,16 @@ namespace vecsearch {
 
 namespace {
 
-// Lucene's default English stop set.
+// Lucene's default English stop set, plus "i" and the single letters that
+// contractions leave behind (it's, don't, I'd, I'm), since one-character
+// tokens are kept ("Level 3", "iPhone X").
 const std::unordered_set<std::string>& stopwords() {
   static const std::unordered_set<std::string> s = {
       "a",    "an",   "and",   "are",  "as",   "at",    "be",   "but",  "by",
       "for",  "if",   "in",    "into", "is",   "it",    "no",   "not",  "of",
       "on",   "or",   "such",  "that", "the",  "their", "then", "there", "these",
-      "they", "this", "to",    "was",  "will", "with"};
+      "they", "this", "to",    "was",  "will", "with",
+      "i",    "s",    "t",     "d",    "m"};
   return s;
 }
 
@@ -43,7 +46,7 @@ std::vector<std::string> BM25Index::tokenize(const std::string& text, bool remov
   std::vector<std::string> out;
   std::string cur;
   auto flush = [&] {
-    if (cur.size() >= 2 && !(remove_stopwords && stopwords().count(cur))) out.push_back(cur);
+    if (!cur.empty() && !(remove_stopwords && stopwords().count(cur))) out.push_back(cur);
     cur.clear();
   };
   for (unsigned char c : text) {

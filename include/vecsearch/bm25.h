@@ -27,7 +27,7 @@ class BM25Index {
   explicit BM25Index(BM25Params params = {});
 
   // Lowercases ASCII and splits on anything that isn't [a-z0-9] or a non-ASCII
-  // byte, so UTF-8 words stay whole. Drops 1-char tokens and, optionally, stopwords.
+  // byte, so UTF-8 words stay whole. Optionally drops stopwords.
   static std::vector<std::string> tokenize(const std::string& text, bool remove_stopwords = true);
 
   // Appends documents; ids continue from size(). Must not run concurrently with search().
