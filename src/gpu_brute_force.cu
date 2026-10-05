@@ -21,7 +21,9 @@ namespace {
 
 constexpr uint32_t kNoId = GpuBruteForceIndex::kNone;
 constexpr int kSkinnyQueries = 8;          // queries per skinny pass over the data
-constexpr size_t kSkinnyMaxBatch = 8;      // Auto picks Skinny up to this many queries
+// Auto picks Skinny up to this many queries. On a T4 (1M x 384) Skinny takes 18.9 ms for 16
+// queries against Tiled's 24.1, and 37.4 against 25.5 for 32 (results/gpu/colab_methods.csv).
+constexpr size_t kSkinnyMaxBatch = 16;
 constexpr size_t kMaxQueryTile = 4096;     // queries per round (bounds the candidate buffers)
 constexpr size_t kDistBudget = size_t(1) << 27;  // floats in the distance block (512 MB)
 constexpr int kSelectSlots = 4096;         // candidates one select block sorts in shared memory

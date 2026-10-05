@@ -1,0 +1,21 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu
+cuda-naive,Tesla T4,1000000,384,ip,10,1,21.128,47.3,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,4,82.86,48.3,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,8,163.999,48.8,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,16,322.325,49.6,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,32,634.257,50.5,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,128,2430.323,52.7,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,1024,19956.262,51.3,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,1,6.276,159.3,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,4,6.906,579.2,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,8,9.575,835.5,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,16,18.872,847.8,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,32,37.402,855.6,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,128,148.155,864.0,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,1,22.306,44.8,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,4,22.9,174.7,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,8,23.063,346.9,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,16,24.057,665.1,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,32,25.493,1255.2,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,128,34.476,3712.8,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,1024,304.25,3365.7,1.0
