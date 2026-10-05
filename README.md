@@ -1,6 +1,6 @@
 # vecsearch — HNSW vector search in C++, benchmarked against FAISS and ScaNN
 
-HNSW (Hierarchical Navigable Small World) graphs in C++17 with pybind11 bindings, benchmarked on 1M customer-support tweet embeddings against hnswlib, FAISS and ScaNN, and served as a sharded gRPC service. Also includes a BM25 inverted index, filtered graph search and reciprocal rank fusion for hybrid retrieval.
+HNSW (Hierarchical Navigable Small World) graphs in C++17 with pybind11 bindings, benchmarked on 1M customer-support tweet embeddings against hnswlib, FAISS and ScaNN, and served as a sharded gRPC service. Also includes a BM25 inverted index, filtered graph search, reciprocal rank fusion for hybrid retrieval, and CUDA kernels for exact search on a GPU.
 
 [![CI](https://github.com/Manojkaipu/vecsearch/actions/workflows/ci.yml/badge.svg)](https://github.com/Manojkaipu/vecsearch/actions/workflows/ci.yml)
 
@@ -70,6 +70,45 @@ ids_v, _ = hnsw.search(query_vec, k=100, ef=128, filter=mask, exact_below=5000)
 top, scores = vs.rrf([ids_v[0], ids_b[0]], k=10)
 ```
 
+### Exact search on a GPU
+![qps vs batch](results/gpu/qps_vs_batch.png)
+
+Exact top-10 over 1M x 384 vectors (cosine, the tweet benchmark's shape), timed per call including copying queries in and results out. The GPU is Colab's free Tesla T4. Every row returns the same top 10 as the CPU index (recall 1.0).
+
+Queries per second by batch size:
+
+| | 1 | 8 | 32 | 128 | 512 | 1024 | 4096 |
+|---|---|---|---|---|---|---|---|
+| **vecsearch CUDA, T4** | **159** | **824** | 1,253 | **3,691** | 3,530 | 3,358 | 2,897 |
+| FAISS-GPU, T4 | 104 | 490 | **1,787** | 3,560 | **4,658** | **4,681** | **4,649** |
+| vecsearch AVX2, laptop (8 threads) | 49 | 217 | 319 | 397 | 385 | 394 | — |
+| FAISS-CPU, laptop (8 threads) | 25 | 60 | 54 | 45 | 205 | 138 | — |
+| vecsearch AVX2, Colab (2 vCPUs) | 9 | 38 | 44 | 47 | 43 | 44 | — |
+
+* **Against the AVX2 code:** the GPU is 3.2x faster for one query and 9.3x faster at batch 128, against the laptop's 8 threads. Against the 2 vCPUs on the same Colab machine it is 79x, but that baseline is too weak to mean much.
+* **Against FAISS-GPU:** 1.5x faster for one query and 1.7x for 8, level at 128, then 72-76% of its throughput at 512-1024 and 62% at 4096. FAISS uses cuBLAS for the matrix multiply. I haven't profiled where the tiled kernel loses ground at large batches.
+* **Small batches are bandwidth-bound.** One query reads all 1.5 GB of vectors in 6.3 ms, about 244 GB/s, or 76% of the T4's 320 GB/s.
+* **Large batches are compute-bound.** At batch 128 the GPU sustains about 2.8 TFLOPS end to end; FAISS reaches 3.6 at batch 1024.
+
+The CPU baseline is not the single-threaded `search()`. `search_batch` splits the data across threads, keeps ~256 KB of vectors in L2 while every query passes over them, and computes four queries per vector load with AVX2/FMA. It reaches about 300 GFLOPS on the laptop.
+
+#### Kernel ablation (T4)
+![kernels](results/gpu/kernels.png)
+
+| kernel | idea | QPS at batch 1 | 16 | 128 | 1024 |
+|---|---|---|---|---|---|
+| naive | the CPU loop ported directly: one thread per (query, vector), uncoalesced reads | 47 | 50 | 53 | 51 |
+| skinny | one warp per vector, coalesced float4 reads, each vector read once for 8 queries | **159** | **848** | 864 | — |
+| tiled | 128x128 shared-memory tiles, an 8x8 register block per thread, prefetching | 45 | 665 | **3,713** | **3,366** |
+
+`search(..., method="auto")` uses skinny up to 16 queries and tiled above that. Top-k is a second kernel. Each thread keeps a sorted register list of its best k, and the lists are bitonic-sorted in shared memory. Large batches go through the data in chunks so the distance block stays under 512 MB.
+
+```python
+gpu = vs.GpuBruteForceIndex(384, metric="ip")   # pip install with CMAKE_ARGS=-DVECSEARCH_BUILD_CUDA=ON
+gpu.add(xb)
+ids, dists = gpu.search(queries, k=10)           # k <= 128
+```
+
 ## Architecture
 
 ```mermaid
@@ -86,6 +125,7 @@ flowchart LR
 | layer | files |
 |---|---|
 | C++ core | `include/vecsearch/{distance,brute_force,hnsw,bm25}.h`, `src/*.cpp` |
+| CUDA | `include/vecsearch/gpu_brute_force.h`, `src/gpu_brute_force.cu`, `bench/gpu_bench.py`, `bench/gpu_colab.ipynb` |
 | Python bindings | `python/bindings.cpp`, `python/vecsearch/` (GIL released during build/search) |
 | Benchmarks | `bench/prepare_data.py → ground_truth.py → run_benchmarks.py → plot.py`, `bench/ablation.py` |
 | Distributed | `distributed/search.proto`, `build_shards.py`, `shard_worker.py`, `coordinator.py`, `cluster.py`, `latency_bench.py` |
@@ -117,6 +157,8 @@ python bench/prepare_data.py --csv twcs.csv --limit 1000000 --out data/tweets
 make gt bench plot ablate
 make dist dist-load plot-dist
 ```
+
+GPU: open `bench/gpu_colab.ipynb` in Colab with a T4 runtime and run all (about 15 minutes). It builds with `CMAKE_ARGS=-DVECSEARCH_BUILD_CUDA=ON`, runs the GPU tests and writes `results/gpu/colab*.csv`. The laptop rows come from `python bench/gpu_bench.py --backends cpu,faiss-cpu --out results/gpu/laptop.csv`.
 
 Docker (4 shard containers + coordinator):
 ```bash
@@ -164,3 +206,4 @@ Checks I rely on:
 * float32 only. There's no quantization, which is where ScaNN's low-recall speed comes from.
 * The Python gRPC coordinator costs about 1 ms per request; a C++ server would remove most of that.
 * No replicas or hedged requests.
+* The GPU index is exact search only, on one GPU, with k <= 128 and data that fits in GPU memory. At large batches it reaches 62-76% of FAISS-GPU's throughput.

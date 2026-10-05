@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <cmath>
+
 #include "test_util.h"
 
 using namespace vecsearch;
@@ -15,6 +17,41 @@ TEST(BruteForce, FindsExactNeighborsOnALine) {
   EXPECT_EQ(r[0].id, 3u);
   EXPECT_EQ(r[1].id, 4u);
   EXPECT_EQ(r[2].id, 2u);
+}
+
+TEST(BruteForce, BatchMatchesSingleQuery) {
+  // 37 dims exercises the 16-wide, 8-wide and scalar paths; 13 queries leave a partial block.
+  const size_t n = 500, d = 37, nq = 13, k = 10;
+  auto data = vstest::random_data(n, d, 3);
+  auto queries = vstest::random_data(nq, d, 4);
+  for (Metric m : {Metric::L2, Metric::InnerProduct}) {
+    BruteForceIndex bf(d, m);
+    bf.add(data.data(), n);
+    for (int threads : {1, 3}) {
+      std::vector<uint32_t> ids(nq * k);
+      std::vector<float> ds(nq * k);
+      bf.search_batch(queries.data(), nq, k, ids.data(), ds.data(), threads);
+      for (size_t q = 0; q < nq; ++q) {
+        auto r = bf.search(queries.data() + q * d, k);
+        for (size_t j = 0; j < k; ++j) {
+          EXPECT_EQ(ids[q * k + j], r[j].id) << "query " << q << " rank " << j;
+          EXPECT_FLOAT_EQ(ds[q * k + j], r[j].dist);
+        }
+      }
+    }
+  }
+}
+
+TEST(BruteForce, BatchPadsMissingResults) {
+  auto data = vstest::random_data(5, 8, 9);
+  BruteForceIndex bf(8);
+  bf.add(data.data(), 5);
+  std::vector<uint32_t> ids(7);
+  std::vector<float> ds(7);
+  bf.search_batch(data.data(), 1, 7, ids.data(), ds.data(), 4);
+  EXPECT_EQ(ids[0], 0u);
+  EXPECT_EQ(ids[5], BruteForceIndex::kNone);
+  EXPECT_TRUE(std::isinf(ds[6]));
 }
 
 TEST(BruteForce, ResultsSortedAndKClamped) {

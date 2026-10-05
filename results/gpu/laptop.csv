@@ -1,0 +1,13 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1,20.266,49.3,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,8,36.934,216.6,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,32,100.212,319.3,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,128,322.086,397.4,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,512,1330.822,384.7,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1024,2602.14,393.5,1.0
+faiss-cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1,40.073,25.0,1.0
+faiss-cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,8,133.668,59.8,1.0
+faiss-cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,32,598.071,53.5,1.0
+faiss-cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,128,2828.917,45.2,1.0
+faiss-cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,512,2493.482,205.3,1.0
+faiss-cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1024,7444.139,137.6,1.0

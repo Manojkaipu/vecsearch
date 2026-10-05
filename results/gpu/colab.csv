@@ -1,0 +1,27 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu
+cuda,Tesla T4,1000000,384,ip,10,1,6.294,158.9,1.0
+cuda,Tesla T4,1000000,384,ip,10,8,9.708,824.1,1.0
+cuda,Tesla T4,1000000,384,ip,10,32,25.537,1253.1,1.0
+cuda,Tesla T4,1000000,384,ip,10,128,34.683,3690.6,1.0
+cuda,Tesla T4,1000000,384,ip,10,512,145.052,3529.8,1.0
+cuda,Tesla T4,1000000,384,ip,10,1024,304.944,3358.0,1.0
+cuda,Tesla T4,1000000,384,ip,10,4096,1413.854,2897.0,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,1,9.593,104.2,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,8,16.325,490.0,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,32,17.904,1787.3,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,128,35.95,3560.5,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,512,109.909,4658.4,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,1024,218.769,4680.7,1.0
+faiss-gpu,Tesla T4,1000000,384,ip,10,4096,881.129,4648.6,1.0
+cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,1,112.897,8.9,1.0
+cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,8,208.669,38.3,1.0
+cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,32,726.872,44.0,1.0
+cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,128,2738.427,46.7,1.0
+cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,512,12009.096,42.6,1.0
+cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,1024,23241.2,44.1,1.0
+faiss-cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,1,190.654,5.2,1.0
+faiss-cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,8,907.078,8.8,1.0
+faiss-cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,32,804.273,39.8,1.0
+faiss-cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,128,2014.127,63.6,1.0
+faiss-cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,512,8255.856,62.0,1.0
+faiss-cpu,"Intel(R) Xeon(R) CPU @ 2.00GHz, 2 threads",1000000,384,ip,10,1024,14175.406,72.2,1.0
