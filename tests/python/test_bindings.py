@@ -23,6 +23,20 @@ def test_recall_vs_bruteforce(data):
     assert vs.recall_at_k(ids, gt) >= 0.95
 
 
+def test_bruteforce_threads_agree(data):
+    x, q = data
+    bf = vs.BruteForceIndex(64)
+    bf.add(x)
+    ids1, d1 = bf.search(q, k=10)
+    ids4, d4 = bf.search(q, k=10, num_threads=4)
+    np.testing.assert_array_equal(ids1, ids4)
+    np.testing.assert_array_equal(d1, d4)
+    exact = np.argsort(((q[:, None, :] - x[None]) ** 2).sum(-1), axis=1)[:, :10]
+    assert vs.recall_at_k(ids1, exact) > 0.99
+    ids, _ = bf.search(q[0], k=3001)
+    assert ids[0, -1] == -1
+
+
 def test_cosine_and_forcecast(data):
     x, q = data
     xn = vs.normalize(x).astype(np.float64)

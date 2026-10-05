@@ -48,6 +48,22 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: { name: "smoke-results-${{ matrix.python }}", path: results/smoke }
 
+  cuda-build:
+    name: CUDA build (no GPU)
+    runs-on: ubuntu-24.04
+    container: nvidia/cuda:12.6.3-devel-ubuntu24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: apt-get update -qq && apt-get install -y -qq cmake g++ python3-pip python3-dev > /dev/null
+      - name: Build with CUDA for sm_75 (T4) and sm_80
+        env: { CMAKE_ARGS: "-DVECSEARCH_BUILD_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=75;80 -DVECSEARCH_ARCH=x86-64-v3" }
+        run: pip install --break-system-packages . pytest
+      - name: Import without a GPU, run tests (GPU tests skip)
+        run: |
+          python3 -c "import vecsearch as vs; assert vs.GpuBruteForceIndex is not None; assert not vs.cuda_available()"
+          python3 -m pytest tests/python -q
+
   docker:
     runs-on: ubuntu-24.04
     needs: [cpp, python]

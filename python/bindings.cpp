@@ -9,6 +9,9 @@
 #include "vecsearch/bm25.h"
 #include "vecsearch/brute_force.h"
 #include "vecsearch/hnsw.h"
+#ifdef VECSEARCH_HAS_CUDA
+#include "vecsearch/gpu_brute_force.h"
+#endif
 
 namespace py = pybind11;
 using namespace vecsearch;
@@ -41,6 +44,15 @@ static Metric parse_metric(const std::string& s) {
 static void check_2d(const FloatArray& a, size_t dim) {
   if (a.ndim() != 2 || size_t(a.shape(1)) != dim)
     throw std::invalid_argument("expected array of shape (n, " + std::to_string(dim) + ")");
+}
+
+// uint32 ids with 0xFFFFFFFF for "missing" -> int64 with -1
+static py::array_t<int64_t> ids_to_int64(const py::array_t<uint32_t>& ids) {
+  py::array_t<int64_t> out({ids.shape(0), ids.shape(1)});
+  const uint32_t* src = ids.data();
+  int64_t* dst = out.mutable_data();
+  for (py::ssize_t i = 0; i < ids.size(); ++i) dst[i] = src[i] == 0xFFFFFFFFu ? -1 : int64_t(src[i]);
+  return out;
 }
 
 PYBIND11_MODULE(_vecsearch, m) {
@@ -119,25 +131,70 @@ PYBIND11_MODULE(_vecsearch, m) {
            })
       .def(
           "search",
-          [](const BruteForceIndex& self, FloatArray q, size_t k) {
+          [](const BruteForceIndex& self, FloatArray q, size_t k, int num_threads) {
             if (q.ndim() == 1) q = q.reshape({py::ssize_t(1), q.shape(0)});
             check_2d(q, self.dim());
             const size_t nq = q.shape(0);
-            py::array_t<int64_t> ids({nq, k});
+            py::array_t<uint32_t> ids({nq, k});
             py::array_t<float> dists({nq, k});
-            auto I = ids.mutable_unchecked<2>();
-            auto D = dists.mutable_unchecked<2>();
-            for (size_t i = 0; i < nq; ++i) {
-              auto r = self.search(q.data() + i * self.dim(), k);
-              for (size_t j = 0; j < k; ++j) {
-                I(i, j) = j < r.size() ? int64_t(r[j].id) : -1;
-                D(i, j) = j < r.size() ? r[j].dist : INFINITY;
-              }
+            {
+              py::gil_scoped_release nogil;
+              self.search_batch(q.data(), nq, k, ids.mutable_data(), dists.mutable_data(), num_threads);
             }
-            return py::make_tuple(ids, dists);
+            return py::make_tuple(ids_to_int64(ids), dists);
           },
-          py::arg("queries"), py::arg("k") = 10)
+          py::arg("queries"), py::arg("k") = 10, py::arg("num_threads") = 1,
+          "Exact top-k. Returns (ids[int64, nq x k], distances[float32, nq x k]); missing = -1.")
+      .def_property_readonly("dim", &BruteForceIndex::dim)
       .def("__len__", &BruteForceIndex::size);
+
+#ifdef VECSEARCH_HAS_CUDA
+  py::class_<GpuBruteForceIndex>(m, "GpuBruteForceIndex")
+      .def(py::init([](size_t dim, const std::string& metric, int device) {
+             return std::make_unique<GpuBruteForceIndex>(dim, parse_metric(metric), device);
+           }),
+           py::arg("dim"), py::arg("metric") = "l2", py::arg("device") = 0)
+      .def(
+          "add",
+          [](GpuBruteForceIndex& self, FloatArray x) {
+            check_2d(x, self.dim());
+            py::gil_scoped_release nogil;
+            self.add(x.data(), x.shape(0));
+          },
+          py::arg("x"))
+      .def(
+          "search",
+          [](GpuBruteForceIndex& self, FloatArray q, size_t k, const std::string& method) {
+            GpuMethod gm;
+            if (method == "auto") gm = GpuMethod::Auto;
+            else if (method == "naive") gm = GpuMethod::Naive;
+            else if (method == "skinny") gm = GpuMethod::Skinny;
+            else if (method == "tiled") gm = GpuMethod::Tiled;
+            else throw std::invalid_argument("method must be 'auto', 'naive', 'skinny' or 'tiled'");
+            if (q.ndim() == 1) q = q.reshape({py::ssize_t(1), q.shape(0)});
+            check_2d(q, self.dim());
+            const size_t nq = q.shape(0);
+            py::array_t<uint32_t> ids({nq, k});
+            py::array_t<float> dists({nq, k});
+            {
+              py::gil_scoped_release nogil;
+              self.search(q.data(), nq, k, ids.mutable_data(), dists.mutable_data(), gm);
+            }
+            return py::make_tuple(ids_to_int64(ids), dists);
+          },
+          py::arg("queries"), py::arg("k") = 10, py::arg("method") = "auto",
+          "Exact top-k on the GPU, k <= 128. Returns (ids[int64, nq x k], distances[float32, nq x k]).")
+      .def_property_readonly("dim", &GpuBruteForceIndex::dim)
+      .def("__len__", &GpuBruteForceIndex::size);
+#endif
+
+  m.def("cuda_available", [] {
+#ifdef VECSEARCH_HAS_CUDA
+    return cuda_available();
+#else
+    return false;
+#endif
+  }, "True if built with CUDA and a GPU is visible.");
 
   py::class_<BM25Index>(m, "BM25Index")
       .def(py::init([](float k1, float b, bool remove_stopwords) {

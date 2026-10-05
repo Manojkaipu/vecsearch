@@ -1,9 +1,14 @@
 """vecsearch — HNSW vector search engine (C++ core, pybind11 bindings)."""
 import numpy as np
 
-from ._vecsearch import BM25Index, BruteForceIndex, HNSWIndex
+from . import _vecsearch
+from ._vecsearch import BM25Index, BruteForceIndex, HNSWIndex, cuda_available
 
-__all__ = ["HNSWIndex", "BruteForceIndex", "BM25Index", "normalize", "recall_at_k", "rrf"]
+# Present only in builds with -DVECSEARCH_BUILD_CUDA=ON.
+GpuBruteForceIndex = getattr(_vecsearch, "GpuBruteForceIndex", None)
+
+__all__ = ["HNSWIndex", "BruteForceIndex", "GpuBruteForceIndex", "BM25Index", "cuda_available",
+           "normalize", "recall_at_k", "rrf"]
 __version__ = "0.1.0"
 
 
