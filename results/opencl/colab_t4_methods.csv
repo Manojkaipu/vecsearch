@@ -1,0 +1,41 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu
+cuda-naive,Tesla T4,1000000,384,ip,10,1,20.508,48.8,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,4,80.475,49.7,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,8,160.256,49.9,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,16,317.409,50.4,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,32,629.186,50.9,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,128,2481.45,51.6,1.0
+cuda-naive,Tesla T4,1000000,384,ip,10,1024,21128.421,48.5,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,1,6.329,158.0,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,4,7.765,515.1,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,8,11.65,686.7,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,16,23.123,691.9,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,32,46.68,685.5,1.0
+cuda-skinny,Tesla T4,1000000,384,ip,10,128,187.1,684.1,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,1,25.397,39.4,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,4,26.326,151.9,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,8,26.697,299.7,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,16,28.054,570.3,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,32,30.286,1056.6,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,128,44.619,2868.7,1.0
+cuda-tiled,Tesla T4,1000000,384,ip,10,1024,384.763,2661.4,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,1,20.074,49.8,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,4,80.021,50.0,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,8,160.39,49.9,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,16,321.178,49.8,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,32,643.002,49.8,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,128,2563.139,49.9,1.0
+opencl-naive,"Tesla T4, local-memory reduction",1000000,384,ip,10,1024,20454.085,50.1,1.0
+opencl-skinny,"Tesla T4, local-memory reduction",1000000,384,ip,10,1,6.33,158.0,1.0
+opencl-skinny,"Tesla T4, local-memory reduction",1000000,384,ip,10,4,9.301,430.0,1.0
+opencl-skinny,"Tesla T4, local-memory reduction",1000000,384,ip,10,8,14.986,533.8,1.0
+opencl-skinny,"Tesla T4, local-memory reduction",1000000,384,ip,10,16,29.85,536.0,1.0
+opencl-skinny,"Tesla T4, local-memory reduction",1000000,384,ip,10,32,59.181,540.7,1.0
+opencl-skinny,"Tesla T4, local-memory reduction",1000000,384,ip,10,128,236.968,540.2,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,1,26.223,38.1,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,4,26.971,148.3,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,8,27.476,291.2,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,16,28.81,555.4,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,32,31.47,1016.9,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,128,46.089,2777.2,1.0
+opencl-tiled,"Tesla T4, local-memory reduction",1000000,384,ip,10,1024,404.794,2529.7,1.0

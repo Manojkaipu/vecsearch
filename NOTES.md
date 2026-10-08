@@ -256,3 +256,35 @@ ones; the naive kernel did not follow that pattern (its cool run was its slowest
 rows are the median of three.
 Earlier in the session (on battery) a 100k-vector smoke test gave a 1.24 TFLOP/s tiled rate, which is
 why the sweep waited for AC.
+
+## Step 3, second comparison: OpenCL vs CUDA on the same T4
+
+Run by the user in Colab with `bench/opencl_colab.ipynb` (branch `opencl`); files in
+`results/opencl/colab_t4*.csv`, `ceilings_t4.json`, `colab_t4_roofline.md`. clinfo on the T4: NVIDIA CUDA
+platform, OpenCL 3.0, OpenCL C 1.2, 40 compute units, max 3.64 GiB allocation, 48 KiB local memory, **"Max
+sub-groups per work group 0"**, so the OpenCL index took the local-memory reduction path in `opencl` as
+well as in `opencl-nosg` (both rows are labelled "local-memory reduction"). Nothing here compares
+sub-groups with CUDA warp shuffles.
+
+Ceilings measured on the T4 with the same microbenchmark: 273.3 GB/s read (85% of 320), 7,649 GFLOP/s
+FP32 FMA (94% of 8.1 TFLOP/s).
+
+| queries/s | 1 | 8 | 32 | 128 | 512 | 1024 | 4096 |
+|---|---|---|---|---|---|---|---|
+| CUDA | 157.8 | 690.9 | 1,083 | 2,977.7 | 2,858.3 | 2,703.6 | 2,385.2 |
+| OpenCL | 158.3 | 532.0 | 1,008.3 | 2,738.1 | 2,617.5 | 2,497.6 | 2,202.2 |
+| ratio | 1.00 | 0.77 | 0.93 | 0.92 | 0.92 | 0.92 | 0.92 |
+
+Per kernel, OpenCL as a share of CUDA (`colab_t4_methods.csv`): naive 0.97-1.03 (same loop), skinny 1.00
+at batch 1 then 0.77-0.83 at batches 4-128, tiled 0.95-0.98. Batch 1 is memory-bound in both (89% of the
+273 GB/s read ceiling, 243 vs 242 GB/s). The skinny loss is the one kernel whose warp reduction became a
+local-memory reduction, and the Arc 140V shows the same direction (its sub-group version is 29% faster than the
+fallback at batch 8), but the T4 has no sub-group path to confirm it. The two OpenCL rows on the T4 are the
+same code and differ by about 4%, which is the noise floor there.
+
+Caution: this session's CUDA numbers are 14-20% below the CUDA README table at batch 8 and up (2,978 vs 3,691
+at batch 128), equal at batch 1. Different day, different Colab T4 (driver 580.82.07). Only same-session
+numbers are compared.
+
+The files were uploaded into the support-rag folder (`support-rag/opencl_t4_results/`, untracked there);
+the four T4 files were copied here. That folder can be deleted from support-rag.

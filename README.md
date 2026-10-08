@@ -111,7 +111,7 @@ ids, dists = gpu.search(queries, k=10)           # k <= 128
 
 ### OpenCL and OpenVINO
 
-The three distance kernels and the top-k kernel are ported to OpenCL C, so the same exact search runs on the laptop's integrated Intel Arc 140V, and on POCL, which runs the same kernels on a CPU. That is what CI uses to check the GPU code on every commit. Everything below is measured on the Arc 140V in WSL2 on AC power (Intel Core Ultra 7 256V), with the CUDA section's data (1M x 384, cosine, k=10) and sweep. Recall against the CPU index is 1.0 in every row.
+The three distance kernels and the top-k kernel are ported to OpenCL C, so the same exact search runs on the laptop's integrated Intel Arc 140V, and on POCL, which runs the same kernels on a CPU. That is what CI uses to check the GPU code on every commit. Everything below is measured on the Arc 140V in WSL2 on AC power (Intel Core Ultra 7 256V), with the CUDA section's data (1M x 384, cosine, k=10) and sweep. Recall against the CPU index is 1.0 in every row. The T4 line on the chart is from a Colab session of its own (see the portability section), not from the CUDA section's table.
 
 ![qps vs batch, OpenCL](results/opencl/qps_vs_batch.png)
 
@@ -138,6 +138,24 @@ Queries per second, median of three full sweeps:
 | 128-4096 | tiled | compute | 48-50% of the FP32 peak (1.8 TFLOP/s at batch 128) |
 
 Small batches are limited by reading the 1.5 GB of vectors, and the kernel already streams them at nearly the measured ceiling. Large batches are limited by compute, but the tiled kernel reaches only half of the peak. The top-k select is the weak spot: it takes 17% of a batch-128 call and 36% of a batch-4096 call, reading the distance block at about 17 GB/s. A fused or faster select is the next speed-up, not the matrix multiply.
+
+#### The cost of portability, on the same T4
+
+The same index built with both backends on one Colab T4, in one session (`bench/opencl_colab.ipynb`). NVIDIA's OpenCL driver reports no sub-group support, so the OpenCL side ran the local-memory reduction instead of sub-groups; this measures that path. Recall against the CPU index is 1.0 throughout.
+
+![CUDA vs OpenCL on a T4](results/opencl/t4_cuda_vs_opencl.png)
+
+| queries per second | 1 | 8 | 32 | 128 | 512 | 1024 | 4096 |
+|---|---|---|---|---|---|---|---|
+| CUDA | 158 | 691 | 1,083 | 2,978 | 2,858 | 2,704 | 2,385 |
+| OpenCL | 158 | 532 | 1,008 | 2,738 | 2,618 | 2,498 | 2,202 |
+| **OpenCL as a share of CUDA** | 100% | **77%** | 93% | 92% | 92% | 92% | 92% |
+
+* **Portability costs about 8% at batch 32 and above**, and nothing at batch 1, where both kernels are limited by the same memory bandwidth (89% of a measured 273 GB/s in both).
+* **The tiled kernel gives up only 3-5%** (97% of CUDA at batch 128, 95% at 1024). The skinny kernel gives up 17-23% at batches 4-128 (78% at batch 8). The skinny kernel is the one that uses a warp reduction, so its loss is consistent with the local-memory reduction costing more than warp shuffles. The Arc 140V shows the same direction: its sub-group version is 29% faster than the fallback at batch 8. The T4 can't separate the two, since it has no sub-group path to compare.
+* **The naive kernel is identical** (about 50 QPS in both), as expected for code that is the same loop.
+* Two runs of the same OpenCL path on the T4 (`opencl` and `opencl-nosg`, which are the same code there) differ by about 4%, so differences below that are noise.
+* This session's CUDA numbers are 14-20% below the CUDA table above at batch 8 and up (2,978 against 3,691 QPS at batch 128) and equal at batch 1; that table was measured on another day. Colab T4s vary, which is why the comparison uses only same-session numbers.
 
 #### Running the models at lower precision
 
@@ -167,7 +185,7 @@ MiniLM (the embedding model support-rag uses) and Qwen2.5-1.5B-Instruct, exporte
 * **My first compute ceiling was wrong.** An FMA microbenchmark written with `float4` chains measured 1.3 TFLOP/s, and the tiled kernel then measured 1.4, above the "ceiling". Intel's compiler turns that loop into code about 2.8x slower than the same loop on scalars (3.6 TFLOP/s). A first fix returned only one lane, so the compiler deleted the rest and reported an impossible 10-27 TFLOP/s.
 * **The first prefill timings were cache hits.** Timing one prompt repeatedly reported 1,834 tokens in 44 ms (42,000 tokens/s) because the pipeline reuses the KV cache of a repeated prefix. Each timed run now has a unique prompt.
 * **The naive kernel isn't repeatable on this GPU:** 14, 9 and 6 QPS across three runs of the same code, while the other two kernels moved by under 10%.
-* **Not measured: the cost of portability on a T4.** That is OpenCL against CUDA on the same GPU. `bench/opencl_colab.ipynb` does it, but I haven't run it, so the only T4 numbers here are the CUDA section's, on different hardware.
+* **The cost of portability was measured on one T4 only, and with the fallback path.** NVIDIA's OpenCL has no sub-groups, so the sub-group kernels were never compared with CUDA's warp shuffles on the same GPU.
 * **INT4 means one recipe.** Plain round-to-nearest 4-bit weights were not tried, and all results are from one laptop whose GPU and CPU share a power budget (run-to-run spread was up to 7% at batch 1, and up to 15% from heat).
 
 ```python

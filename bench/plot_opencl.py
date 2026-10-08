@@ -2,7 +2,7 @@
 
     python bench/plot_opencl.py --median results/opencl/intel_arc140v_median.csv \
         --methods results/opencl/intel_arc140v_methods.csv --profile results/opencl/intel_arc140v_profile.csv \
-        --cuda results/gpu/colab.csv --out-dir results/opencl
+        --t4 results/opencl/colab_t4.csv --out-dir results/opencl
 
 Colours are the first three slots of the validated categorical palette (blue, orange, aqua; worst
 all-pairs CVD delta-E 9.2). Aqua is under 3:1 against the light surface, so every series is also
@@ -47,14 +47,14 @@ def style(ax, xlabel, ylabel):
     ax.tick_params(length=3)
 
 
-def line_chart(ax, lines):
+def line_chart(ax, lines, dys=None):
     """lines: (label, points, colour, marker, linestyle). Direct label at the right end of each."""
-    for label, pts, colour, marker, ls in lines:
+    for n, (label, pts, colour, marker, ls) in enumerate(lines):
         b = list(pts)
         ax.plot(b, [pts[x] for x in b], color=colour, marker=marker, linestyle=ls, linewidth=2, markersize=6,
                 markeredgecolor=SURFACE, markeredgewidth=1.2, label=label)
-        ax.annotate(f"{pts[b[-1]]:,.0f}", (b[-1], pts[b[-1]]), xytext=(7, 0), textcoords="offset points",
-                    va="center", color=INK2, fontsize=8)
+        ax.annotate(f"{pts[b[-1]]:,.0f}", (b[-1], pts[b[-1]]), xytext=(7, dys[n] if dys else 0),
+                    textcoords="offset points", va="center", color=INK2, fontsize=8)
     ax.set_xscale("log", base=2)
     ax.set_yscale("log")
     ax.set_xticks(sorted({x for _, pts, *_ in lines for x in pts}))
@@ -69,7 +69,8 @@ def main():
     ap.add_argument("--median", required=True, help="median_runs.py output with opencl and cpu rows")
     ap.add_argument("--methods", help="gpu_bench.py CSV with opencl-naive/skinny/tiled rows")
     ap.add_argument("--profile", help="opencl_profile.py CSV")
-    ap.add_argument("--cuda", help="results/gpu/colab.csv, drawn for context (a different GPU, run on another day)")
+    ap.add_argument("--t4", help="Colab T4 CSV with cuda and opencl rows from one session: adds the T4 chart "
+                    "and a CUDA line (a different GPU) to the first chart")
     ap.add_argument("--out-dir", required=True)
     args = ap.parse_args()
     out = Path(args.out_dir)
@@ -77,14 +78,26 @@ def main():
     rows = read(args.median)
     lines = [("OpenCL, Intel Arc 140V (this laptop)", series(rows, "opencl"), BLUE, "o", "-"),
              ("AVX2 CPU index, same laptop, 8 threads", series(rows, "cpu"), ORANGE, "s", "-")]
-    if args.cuda:
-        lines.append(("CUDA, Colab T4 (for context)", series(read(args.cuda), "cuda"), AQUA, "^", "--"))
+    t4 = read(args.t4) if args.t4 else None
+    if t4:
+        lines.append(("CUDA, Colab T4 (a different GPU, for context)", series(t4, "cuda"), AQUA, "^", "--"))
     fig, ax = plt.subplots(figsize=(7.2, 4.4))
     line_chart(ax, lines)
     style(ax, "queries per call (batch size)", "queries / second (log scale)")
     ax.set_title("Exact top-10 over 1M x 384 vectors (cosine)", loc="left", color=INK, fontsize=10, pad=10)
     fig.tight_layout()
     fig.savefig(out / "qps_vs_batch.png", dpi=140)
+
+    if t4:
+        lines = [("CUDA", series(t4, "cuda"), BLUE, "o", "-"),
+                 ("OpenCL (local-memory reduction: the T4 has no sub-groups)", series(t4, "opencl"), ORANGE, "s", "-")]
+        fig, ax = plt.subplots(figsize=(7.2, 4.4))
+        line_chart(ax, lines, dys=[7, -7])
+        style(ax, "queries per call (batch size)", "queries / second (log scale)")
+        ax.legend(frameon=False, fontsize=8, loc="lower right")
+        ax.set_title("Same GPU, same session: CUDA vs OpenCL on a Colab T4", loc="left", color=INK, fontsize=10, pad=10)
+        fig.tight_layout()
+        fig.savefig(out / "t4_cuda_vs_opencl.png", dpi=140)
 
     if args.methods:
         m = read(args.methods)
