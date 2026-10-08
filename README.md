@@ -1,6 +1,6 @@
 # vecsearch — HNSW vector search in C++, benchmarked against FAISS and ScaNN
 
-HNSW (Hierarchical Navigable Small World) graphs in C++17 with pybind11 bindings, benchmarked on 1M customer-support tweet embeddings against hnswlib, FAISS and ScaNN, and served as a sharded gRPC service. Also includes a BM25 inverted index, filtered graph search, reciprocal rank fusion for hybrid retrieval, and CUDA kernels for exact search on a GPU.
+HNSW (Hierarchical Navigable Small World) graphs in C++17 with pybind11 bindings, benchmarked on 1M customer-support tweet embeddings against hnswlib, FAISS and ScaNN, and served as a sharded gRPC service. Also includes a BM25 inverted index, filtered graph search, reciprocal rank fusion for hybrid retrieval, and CUDA and OpenCL kernels for exact search on a GPU, with the OpenCL port run on an Intel GPU and a quantization study of two models with OpenVINO.
 
 [![CI](https://github.com/Manojkaipu/vecsearch/actions/workflows/ci.yml/badge.svg)](https://github.com/Manojkaipu/vecsearch/actions/workflows/ci.yml)
 
@@ -109,6 +109,73 @@ gpu.add(xb)
 ids, dists = gpu.search(queries, k=10)           # k <= 128
 ```
 
+### OpenCL and OpenVINO
+
+The three distance kernels and the top-k kernel are ported to OpenCL C, so the same exact search runs on the laptop's integrated Intel Arc 140V, and on POCL, which runs the same kernels on a CPU. That is what CI uses to check the GPU code on every commit. Everything below is measured on the Arc 140V in WSL2 on AC power (Intel Core Ultra 7 256V), with the CUDA section's data (1M x 384, cosine, k=10) and sweep. Recall against the CPU index is 1.0 in every row.
+
+![qps vs batch, OpenCL](results/opencl/qps_vs_batch.png)
+
+Queries per second, median of three full sweeps:
+
+| | 1 | 8 | 32 | 128 | 512 | 1024 | 4096 |
+|---|---|---|---|---|---|---|---|
+| **OpenCL, Arc 140V** | 59 | 434 | 750 | **1,991** | 1,893 | 1,806 | 1,536 |
+| AVX2 CPU index, same laptop, 8 threads | 52 | 242 | 403 | 478 | 466 | 471 | — |
+| OpenCL speedup over that CPU | 1.1x | 1.8x | 1.9x | **4.2x** | 4.1x | 3.8x | — |
+
+* **Correctness:** results are compared with the CPU index the way the CUDA tests do it (distances within rtol 1e-4 / atol 1e-3, at least 99% of ids equal, rows sorted), plus a stricter check: every returned id's distance is recomputed on the CPU and must match the reported one. 104 GoogleTest and 181 pytest cases cover k larger than the dataset, batch 1, a 5,000-query batch, sizes either side of the 128-wide tile, every k bucket and paged storage. They pass on the Arc 140V and, in GitHub Actions, on POCL.
+* **What translated:** warps became sub-groups (`sub_group_reduce_add`, with no assumption that a sub-group is 32 wide), shared memory became local memory, and pointer offsets became kernel arguments. Two things needed more than a rename. Intel caps a single allocation at 1 GiB, and 1M x 384 floats are 1.5 GB, so the index stores its data in pages. And a device without sub-group support gets a local-memory reduction instead, which the tests also run.
+* **Memory-bound or compute-bound** (ceilings measured on this GPU with plain kernels: 104 GB/s read, 3.6 TFLOP/s FP32):
+
+![kernels](results/opencl/kernels.png)
+
+![where the time goes](results/opencl/time_split.png)
+
+| batch | kernel | bound by | distance kernel reaches |
+|---|---|---|---|
+| 1-8 | skinny | memory | 94-96% of the read ceiling (about 100 GB/s) |
+| 32 | tiled | compute | 69% of the FP32 peak, because it computes a full 128-query tile |
+| 128-4096 | tiled | compute | 48-50% of the FP32 peak (1.8 TFLOP/s at batch 128) |
+
+Small batches are limited by reading the 1.5 GB of vectors, and the kernel already streams them at nearly the measured ceiling. Large batches are limited by compute, but the tiled kernel reaches only half of the peak. The top-k select is the weak spot: it takes 17% of a batch-128 call and 36% of a batch-4096 call, reading the distance block at about 17 GB/s. A fused or faster select is the next speed-up, not the matrix multiply.
+
+#### Running the models at lower precision
+
+MiniLM (the embedding model support-rag uses) and Qwen2.5-1.5B-Instruct, exported with optimum-intel and run on OpenVINO's GPU device. The embedding table searches support-rag's real 892,800-chunk index with its 96 evaluation questions; "top-10 overlap" is the share of the full-precision model's top 10 chunks the quantized model also returns.
+
+| MiniLM | top-10 overlap with FP32 | source conversation in top 10 | query p50 | chunks/s (batch 32) | model |
+|---|---|---|---|---|---|
+| FP32, PyTorch on CPU | reference | 54.7% | 7.9 ms | 45 | |
+| FP16, GPU | 1.000 | 54.7% | 2.8 ms | 830 | 43 MB |
+| INT8, GPU | 0.975 | 54.7% | 3.5 ms | 792 | 22 MB |
+| INT4, GPU | 0.792 | 51.2% | 3.5 ms | 677 | 17 MB |
+
+| Qwen2.5-1.5B | GPU memory | decode | prefill (1.8k-token prompt) | agrees with FP16's verdicts | flagged answers caught |
+|---|---|---|---|---|---|
+| FP16 | 3,201 MB | 27.6 tok/s | 6,556 tok/s | — | 6 of 7 |
+| INT8 | 1,626 MB | 47.0 tok/s | 7,420 tok/s | 86% | 5 of 7 |
+| INT4 | 1,026 MB | 66.2 tok/s | 6,716 tok/s | 63% | 2 of 7 |
+
+* **INT8 is nearly free; INT4 is not.** INT8 halves the LLM's memory (3.2 to 1.6 GB) and the embedding model keeps 97.5% of its top 10. INT4 (the optimum-intel default for Qwen: AWQ and scale estimation calibrated on wikitext2, group size 128) is 3.1x smaller and 2.4x faster than FP16, but changes 37% of the model's verifier verdicts and loses a fifth of the embedding model's top 10.
+* **On the GPU, quantizing the small model doesn't make it faster.** FP16 is the fastest MiniLM there; INT8 only pays off on the CPU (87 vs 56 chunks/s).
+* **The small model is not a usable verifier at any precision.** Run as support-rag's verifier on its 86 stored answers, it agrees with the original verifier on 34% (FP16), 45% (INT8) and 55% (INT4) of them, and Cohen's kappa is about 0 in every case. Always answering "supported" would agree on 92%. The agreement rises as precision drops only because the model drifts toward the majority answer while catching fewer of the 7 answers the original flagged. The verdicts are not exactly repeatable on the GPU either (INT4's agreement was 49/86 on one run and 47/86 on the next).
+
+`python bench/validate.py` runs the correctness tests, the benchmark and both model checks, and writes a markdown report. Each check has a threshold in `bench/validation_thresholds.json`, set just below what was measured, and the exit code is 1 if any fails. The full numbers and the exact commands are in `NOTES.md`.
+
+#### What didn't work
+
+* **My first compute ceiling was wrong.** An FMA microbenchmark written with `float4` chains measured 1.3 TFLOP/s, and the tiled kernel then measured 1.4, above the "ceiling". Intel's compiler turns that loop into code about 2.8x slower than the same loop on scalars (3.6 TFLOP/s). A first fix returned only one lane, so the compiler deleted the rest and reported an impossible 10-27 TFLOP/s.
+* **The first prefill timings were cache hits.** Timing one prompt repeatedly reported 1,834 tokens in 44 ms (42,000 tokens/s) because the pipeline reuses the KV cache of a repeated prefix. Each timed run now has a unique prompt.
+* **The naive kernel isn't repeatable on this GPU:** 14, 9 and 6 QPS across three runs of the same code, while the other two kernels moved by under 10%.
+* **Not measured: the cost of portability on a T4.** That is OpenCL against CUDA on the same GPU. `bench/opencl_colab.ipynb` does it, but I haven't run it, so the only T4 numbers here are the CUDA section's, on different hardware.
+* **INT4 means one recipe.** Plain round-to-nearest 4-bit weights were not tried, and all results are from one laptop whose GPU and CPU share a power budget (run-to-run spread was up to 7% at batch 1, and up to 15% from heat).
+
+```python
+gpu = vs.OpenCLBruteForceIndex(384, metric="ip")   # CMAKE_ARGS=-DVECSEARCH_BUILD_OPENCL=ON
+gpu.add(xb)
+ids, dists = gpu.search(queries, k=10)              # same interface as GpuBruteForceIndex; vs.opencl_devices() lists devices
+```
+
 ## Architecture
 
 ```mermaid
@@ -126,6 +193,8 @@ flowchart LR
 |---|---|
 | C++ core | `include/vecsearch/{distance,brute_force,hnsw,bm25}.h`, `src/*.cpp` |
 | CUDA | `include/vecsearch/gpu_brute_force.h`, `src/gpu_brute_force.cu`, `bench/gpu_bench.py`, `bench/gpu_colab.ipynb` |
+| OpenCL | `include/vecsearch/opencl_brute_force.h`, `src/opencl_brute_force.cpp`, `src/opencl/kernels.cl`, `bench/{roofline,opencl_roofline,opencl_profile}.py`, `bench/opencl_colab.ipynb` |
+| OpenVINO | `bench/openvino/` (export, speed and memory, quality), `bench/validate.py`, `bench/validation_thresholds.json` |
 | Python bindings | `python/bindings.cpp`, `python/vecsearch/` (GIL released during build/search) |
 | Benchmarks | `bench/prepare_data.py → ground_truth.py → run_benchmarks.py → plot.py`, `bench/ablation.py` |
 | Distributed | `distributed/search.proto`, `build_shards.py`, `shard_worker.py`, `coordinator.py`, `cluster.py`, `latency_bench.py` |
@@ -206,4 +275,4 @@ Checks I rely on:
 * float32 only. There's no quantization, which is where ScaNN's low-recall speed comes from.
 * The Python gRPC coordinator costs about 1 ms per request; a C++ server would remove most of that.
 * No replicas or hedged requests.
-* The GPU index is exact search only, on one GPU, with k <= 128 and data that fits in GPU memory. At large batches it reaches 62-76% of FAISS-GPU's throughput.
+* The GPU indexes (CUDA and OpenCL) are exact search only, on one GPU, with k <= 128 and data that fits in GPU memory. At large batches it reaches 62-76% of FAISS-GPU's throughput.

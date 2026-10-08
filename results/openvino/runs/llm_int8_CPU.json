@@ -1,0 +1,31 @@
+{
+  "model": "Qwen2.5-1.5B-Instruct",
+  "precision": "int8",
+  "device": "CPU",
+  "load_s": 2.6,
+  "speed": {
+    "short": {
+      "input_tokens": 61,
+      "new_tokens": 128,
+      "ttft_ms": 208.7,
+      "tpot_ms": 40.97,
+      "decode_tokens_per_s": 24.4,
+      "prefill_tokens_per_s": 292.3
+    },
+    "verifier": {
+      "input_tokens": 1839,
+      "new_tokens": 128,
+      "ttft_ms": 5283.8,
+      "tpot_ms": 47.43,
+      "decode_tokens_per_s": 21.1,
+      "prefill_tokens_per_s": 348.0
+    }
+  },
+  "constrained_decoding": true,
+  "verifier_items": 0,
+  "verifier_wall_s": 0.0,
+  "peak_rss_mb": 4087.4,
+  "baseline_rss_mb": 563.8,
+  "gpu_mem_mb": null,
+  "verdicts": []
+}

@@ -1,0 +1,892 @@
+{
+  "model": "Qwen2.5-1.5B-Instruct",
+  "precision": "int8",
+  "device": "GPU",
+  "load_s": 23.25,
+  "speed": {
+    "short": {
+      "input_tokens": 61,
+      "new_tokens": 128,
+      "ttft_ms": 47.2,
+      "tpot_ms": 21.26,
+      "decode_tokens_per_s": 47.0,
+      "prefill_tokens_per_s": 1293.3
+    },
+    "verifier": {
+      "input_tokens": 1839,
+      "new_tokens": 128,
+      "ttft_ms": 247.9,
+      "tpot_ms": 22.56,
+      "decode_tokens_per_s": 44.3,
+      "prefill_tokens_per_s": 7419.8
+    }
+  },
+  "constrained_decoding": true,
+  "verifier_items": 86,
+  "verifier_wall_s": 237.7,
+  "peak_rss_mb": 1175.4,
+  "baseline_rss_mb": 563.8,
+  "gpu_mem_mb": 1626.1,
+  "verdicts": [
+    {
+      "id": "q043",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations.\"\n}",
+      "input_tokens": 542,
+      "new_tokens": 30,
+      "total_ms": 818.3
+    },
+    {
+      "id": "q091",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"How do I reset my Netflix password if I can't access my email anymore?\"\n  ],\n  \"feedback\": \"The answer does not provide information on how to reset a Netflix password when the account email is inaccessible. The provided conversation does not cover this specific scenario.\"\n}",
+      "input_tokens": 1006,
+      "new_tokens": 71,
+      "total_ms": 1740.5
+    },
+    {
+      "id": "q068",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The claim is that GWR can provide compensation for train cancellations due to crew shortages, and that compensation is available if delayed by an hour or more.\"\n}",
+      "input_tokens": 4143,
+      "new_tokens": 61,
+      "total_ms": 2456.5
+    },
+    {
+      "id": "q020",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Delta has a process for filing a discrimination complaint.\"\n  ],\n  \"feedback\": \"The answer states that Delta has two ways to file a discrimination complaint, but it does not provide details on the process or the form URLs. The answer also mentions that Delta does not condone or tolerate discrimination, but it does not provide specific examples of discrimination or how to file a complaint.\"\n}",
+      "input_tokens": 4788,
+      "new_tokens": 93,
+      "total_ms": 3375.1
+    },
+    {
+      "id": "q021",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I booked an American Airlines flight with miles and need to cancel. Why am I being charged a fee?\"\n  ],\n  \"feedback\": \"The answer does not cite any conversations that support the claim that you are being charged a fee for canceling a flight booked with miles. The answer only cites a single conversation from October 2017 where an agent said there is a charge to reinstate miles into your account. The answer does not provide any information about why you are being charged a fee or how to cancel a flight booked with miles.\"\n}",
+      "input_tokens": 1816,
+      "new_tokens": 128,
+      "total_ms": 3042.3
+    },
+    {
+      "id": "q044",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1336,
+      "new_tokens": 21,
+      "total_ms": 618.6
+    },
+    {
+      "id": "q045",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"UPS said they cannot speed up or control Kuwait (or other) government customs.\",\n    \"When documentation was the issue, they pointed people to the shipper rather than saying UPS would clear it.\",\n    \"They sometimes offered to have a local team follow up if you provided contact details, or to check a tracking number you sent them, but in the Kuwait customs case they checked, they concluded nothing further could be done until customs released the package. Policies and local processes may have changed since 2017.\"\n  ],\n  \"feedback\": \"The answer does not cite any 2017 conversations that support the claim that UPS cannot control Kuwait customs or that they would clear it if the customer provided documentation. The answer also does not mention that UPS sometimes offered to have a local team follow up if the customer provided contact details or check a tracking number, but in the Kuwait customs case they concluded nothing further could be done until customs released the package. Policies and local processes may have changed since 2017.\"\n}",
+      "input_tokens": 1803,
+      "new_tokens": 224,
+      "total_ms": 5228.1
+    },
+    {
+      "id": "q022",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 1708,
+      "new_tokens": 42,
+      "total_ms": 1175.3
+    },
+    {
+      "id": "q046",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Hulu agents did not describe one Chromecast-only fix for Live TV skipping in 2017.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific claim from 2017 that Hulu agents made regarding a Chromecast-only fix for Live TV skipping. The answer instead cites a mix of general knowledge and customer feedback, which is unsupported.\"\n}",
+      "input_tokens": 3439,
+      "new_tokens": 93,
+      "total_ms": 2695.3
+    },
+    {
+      "id": "q023",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"American Airlines moved me out of the Main Cabin Extra seat I paid for. Do I get a refund?\",\n    \"I paid for a Main Cabin Extra seat and did not sit in it, I should get that charge back—though they described the process in slightly different ways.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations from 2017 that support the claim. The answer provides general information about refunds for Main Cabin Extra seats without citing any specific conversations. The answer also does not provide a timeline for when the refund should be received.\"\n}",
+      "input_tokens": 1718,
+      "new_tokens": 133,
+      "total_ms": 3155.2
+    },
+    {
+      "id": "q025",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 601,
+      "new_tokens": 21,
+      "total_ms": 824.8
+    },
+    {
+      "id": "q047",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversation.\"\n}",
+      "input_tokens": 626,
+      "new_tokens": 30,
+      "total_ms": 751.0
+    },
+    {
+      "id": "q071",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"You can decline substitutions in your account settings, or in the basket choose which items may be substituted and which you’d rather not.\"\n  ],\n  \"feedback\": \"The claim about declining substitutions in account settings or the basket is unsupported. The answer should provide a clear option for customers to opt out of substitutions.\"\n}",
+      "input_tokens": 4411,
+      "new_tokens": 80,
+      "total_ms": 2812.5
+    },
+    {
+      "id": "q070",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the company's support policies from October to December 2017.\"\n}",
+      "input_tokens": 5021,
+      "new_tokens": 53,
+      "total_ms": 2335.6
+    },
+    {
+      "id": "q048",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Hulu support gave a few related reasons why some shows have a lot of commercials.\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations from 2017, which is required.\"\n}",
+      "input_tokens": 2664,
+      "new_tokens": 61,
+      "total_ms": 1790.1
+    },
+    {
+      "id": "q072",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Sainsbury's stopped selling a product I really like\",\n    \"I can ask them to bring it back\"\n  ],\n  \"feedback\": \"The answer does not cite any conversations that support the claim that Sainsbury's stopped selling a product the customer really likes. The answer also does not support the claim that the customer can ask them to bring it back.\"\n}",
+      "input_tokens": 2710,
+      "new_tokens": 92,
+      "total_ms": 2505.2
+    },
+    {
+      "id": "q001",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 916,
+      "new_tokens": 32,
+      "total_ms": 821.9
+    },
+    {
+      "id": "q027",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The agent in the first conversation mentioned licensing agreements and the inconvenience caused by the limitation, and the agent in the second conversation explained that individual networks decide what content is available away from home Wi-Fi, which is related to the mobile sports limits.\"\n}",
+      "input_tokens": 690,
+      "new_tokens": 78,
+      "total_ms": 1756.8
+    },
+    {
+      "id": "q026",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Was the recent Comcast internet outage caused by Level 3?\"\n  ],\n  \"feedback\": \"The answer does not cite any specific claim from a company agent that the internet outage was caused by Level 3. The answer only states that there was a nationwide interruption and that agents acknowledged it but did not attribute it to Level 3. The claim that the internet outage was caused by Level 3 is unsupported.\"\n}",
+      "input_tokens": 2261,
+      "new_tokens": 100,
+      "total_ms": 2571.9
+    },
+    {
+      "id": "q049",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1576,
+      "new_tokens": 21,
+      "total_ms": 664.3
+    },
+    {
+      "id": "q073",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 1902,
+      "new_tokens": 42,
+      "total_ms": 1172.0
+    },
+    {
+      "id": "q074",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1194,
+      "new_tokens": 32,
+      "total_ms": 874.3
+    },
+    {
+      "id": "q002",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Amazon's Twitter agents do not have access to seller accounts from Twitter and cannot reinstate a suspended merchant account there.\"\n  ],\n  \"feedback\": \"The claim about Amazon's Twitter agents not having access to seller accounts and not being able to reinstate a suspended merchant account is unsupported. The answer should provide information from a different source or clarify that the claim is based on 2017 support replies.\"\n}",
+      "input_tokens": 4817,
+      "new_tokens": 100,
+      "total_ms": 3575.4
+    },
+    {
+      "id": "q050",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Chipotle’s Twitter support did not name any restaurants that still had soft corn tortillas.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific Chipotle restaurants that still have soft corn tortillas. It only mentions that the soft corn tortillas were phased out and that crispy corn tortillas are still available. To fix this, the answer should name specific Chipotle restaurants that still have soft corn tortillas.\"\n}",
+      "input_tokens": 1105,
+      "new_tokens": 103,
+      "total_ms": 2404.9
+    },
+    {
+      "id": "q098",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"How much does Sony charge to repair a PS5 DualSense controller?\"\n  ],\n  \"feedback\": \"The answer is unsupported because it cites two conversations from 2017, but neither conversation mentions the cost of repairing a PS5 DualSense controller. The answer should be fixed by providing a current estimate or a statement from a company agent about the cost.\"\n}",
+      "input_tokens": 451,
+      "new_tokens": 91,
+      "total_ms": 2017.0
+    },
+    {
+      "id": "q075",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 640,
+      "new_tokens": 21,
+      "total_ms": 559.6
+    },
+    {
+      "id": "q028",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 1656,
+      "new_tokens": 42,
+      "total_ms": 1186.3
+    },
+    {
+      "id": "q051",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide specific examples of Chipotle's policy on onion-free guacamole.\"\n}",
+      "input_tokens": 922,
+      "new_tokens": 46,
+      "total_ms": 1163.0
+    },
+    {
+      "id": "q003",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations.\"\n}",
+      "input_tokens": 2287,
+      "new_tokens": 30,
+      "total_ms": 1007.4
+    },
+    {
+      "id": "q005",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations.\"\n}",
+      "input_tokens": 1131,
+      "new_tokens": 30,
+      "total_ms": 806.2
+    },
+    {
+      "id": "q029",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My Southwest flight to Las Vegas is delayed but a later flight to the same city is boarding first. Why?\"\n  ],\n  \"feedback\": \"The answer does not cite any information from 2017, and the claim about the flight being delayed and boarding first is unsupported.\"\n}",
+      "input_tokens": 1071,
+      "new_tokens": 75,
+      "total_ms": 1832.0
+    },
+    {
+      "id": "q052",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My coworkers got a free chips and guac offer in the Chipotle app but I didn't. Why?\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations from 2017, which is necessary to verify the claim.\"\n}",
+      "input_tokens": 1440,
+      "new_tokens": 70,
+      "total_ms": 1842.2
+    },
+    {
+      "id": "q076",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"O2’s agents in these late-2017 chats said they cannot see what the data was used on.\",\n    \"Usage is taken directly from the SIM and they treat that figure as correct, so they can’t itemise it for you.\",\n    \"One agent asked whether the usage showed on My O2 and said usage is taken directly from the SIM, so it would be correct.\",\n    \"Another said to use My O2 rather than the phone’s own settings for usage info.\",\n    \"A separate reply said the figure from the SIM is right and the phone’s own counter isn’t accurate, without naming My O2.\",\n    \"If the allowance ran down very quickly, they also said the usual 80% warning text might not have been sent, and to keep an eye on My O2 rather than waiting for that text.\",\n    \"They often pointed people at a data-usage or data-saving guide (the links are no longer in these tweets) and, if it happens often, at adding a bolt-on or raising the monthly allowance in My O2.\",\n    \"This is what O2 support said in October–December 2017, so menu",
+      "input_tokens": 4237,
+      "new_tokens": 256,
+      "total_ms": 8008.8
+    },
+    {
+      "id": "q030",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Southwest notifies you when fares drop on a route you're watching\"\n  ],\n  \"feedback\": \"The answer states that Southwest does not have a notification system for decreases in fares, which is not supported by the cited conversations. The agent in the 2017 conversations did not confirm any route-watch notification.\"\n}",
+      "input_tokens": 704,
+      "new_tokens": 82,
+      "total_ms": 1896.3
+    },
+    {
+      "id": "q006",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"If I schedule an Uber ride in advance, am I guaranteed a driver?\"\n  ],\n  \"feedback\": \"The answer does not cite any company agents who said scheduling a ride in advance guarantees a driver. The answer should include a company agent's statement to support the claim.\"\n}",
+      "input_tokens": 1851,
+      "new_tokens": 73,
+      "total_ms": 1985.3
+    },
+    {
+      "id": "q031",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversation from 2017, which explains that the NBC Sports app was unavailable to Charter (Spectrum) users on Fire Stick due to distribution agreements between Spectrum and NBC Sports. There is no need to fix the answer.\"\n}",
+      "input_tokens": 463,
+      "new_tokens": 74,
+      "total_ms": 1713.0
+    },
+    {
+      "id": "q077",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I should get 10gb from you for staying with o2\"\n  ],\n  \"feedback\": \"The answer does not support the claim that the extra loyalty data is automatically added after an upgrade. The agent mentioned that the extra data will show after the 14-day cooling-off period has passed, but it does not explicitly state that it is automatically added immediately after the upgrade.\"\n}",
+      "input_tokens": 2590,
+      "new_tokens": 96,
+      "total_ms": 2624.2
+    },
+    {
+      "id": "q053",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1675,
+      "new_tokens": 21,
+      "total_ms": 744.1
+    },
+    {
+      "id": "q054",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Forza Motorsport 7 goes to a black screen after the driver selection cutscene on my Xbox\",\n    \"Is there a fix?\",\n    \"XboxSupport in Forza 7 I get a black screen as the pick your gender/racer cutscene ends is there a fix for this?\",\n    \"I have tried that about 10 times and get the black screen every time. All I here is music in the background\",\n    \"I have deleted save data, tried it while my xbox is offline and hard reset the console. Nothing is working.\",\n    \"Tried it but now there is the xbox live error not allowing me to launch the game. Tried it offline after that and still get a black screen\",\n    \"I can launch the game now but still getting the blacl screen\"\n  ],\n  \"feedback\": \"The answer does not cite any specific claim from the customer or other companies. It only states that the issue is being looked into by the proper teams and asks for patience. The answer also does not provide a confirmed fix. The information is from 2017 and may have changed since.\"\n}",
+      "input_tokens": 687,
+      "new_tokens": 246,
+      "total_ms": 5612.9
+    },
+    {
+      "id": "q078",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Can O2 add a family discount to my existing contracts?\",\n    \"Separately, an agent said an offer of a discount on additional family lines would apply to upgrading or new connections, not to existing lines, and suggested getting in touch closer to renewal\",\n    \"When a customer said their Family Plan looked applied, the agent said the original price will always show and the amount will be taken from the next bill\"\n  ],\n  \"feedback\": \"The answer does not cite any conversations from 2017, and the unsupported claims are not supported by the cited conversations.\"\n}",
+      "input_tokens": 2082,
+      "new_tokens": 134,
+      "total_ms": 3475.9
+    },
+    {
+      "id": "q032",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The SC code Tesco asked for is the supplier code.\",\n    \"Agents said it starts with ‘SC’ and looks something like SC1234 or SC12345 (for example ‘SC….’).\",\n    \"They told customers it is on the packaging, usually on the back beside or just below the Tesco address, near the barcode. One agent said that on a pastry box it can be a bit hidden: look by the barcode for the Tesco address, and the number starting with SC is at the end of that address or just underneath it.\",\n    \"They also said a supplier code is only visible if it is a Tesco branded item. On a Nature Valley product a customer asked about, an agent said there was no SC code on that product.\",\n    \"This is what Tesco’s Twitter support said in October–November 2017, so packaging layout may have changed since then.\"\n  ],\n  \"feedback\": \"The answer contains unsupported claims and does not cite the correct information from the cited conversations. The SC code is not the supplier code, and the location of the SC code is not as described in the answer.\"\n}",
+      "input_tokens": 2425,
+      "new_tokens": 256,
+      "total_ms": 6446.5
+    },
+    {
+      "id": "q079",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide details about the limited availability of the Priority Star Wars phone-case codes in 2017 and the reasons for the codes not working.\"\n}",
+      "input_tokens": 980,
+      "new_tokens": 60,
+      "total_ms": 1537.1
+    },
+    {
+      "id": "q008",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide details about the promotion, the reasons for its cancellation, and the company's efforts to address the issue.\"\n}",
+      "input_tokens": 1229,
+      "new_tokens": 53,
+      "total_ms": 1448.2
+    },
+    {
+      "id": "q055",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The Crunchyroll app on my Xbox One keeps closing by itself.\",\n    \"The Crunchyroll app on my Xbox One keeps starting and then closing almost immediately.\",\n    \"The Crunchyroll app on my Xbox One keeps loading and then returning to Home.\",\n    \"The Crunchyroll app on my Xbox One keeps opening and then closing almost immediately.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations or steps from the 2017 support threads. It instead provides a general overview of the issues and steps that were suggested, but does not directly support the claim that the app keeps closing by itself.\"\n}",
+      "input_tokens": 1834,
+      "new_tokens": 146,
+      "total_ms": 3631.0
+    },
+    {
+      "id": "q007",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"How do I complain about a rude Uber Eats delivery person?\",\n    \"Agents told customers to send a note through their help link so the team could get in touch and look into it.\",\n    \"They did not give a customer-care phone number for this.\",\n    \"When someone asked where to complain about a rude driver and whether there was a phone line, the agent only pointed them to the help link.\",\n    \"In the app, when the ride is over, you can rate the driver and also leave a comment.\",\n    \"Agents said that about a ride, not specifically about an Uber Eats delivery.\",\n    \"If the rating option does not appear, they still told people to send the details through the help link.\",\n    \"On what happens after a report, the only statement in these threads was about a cab driver, not an Uber Eats courier.\",\n    \"The actual form URLs were not preserved in these transcripts (they show up only as '[link]').\"\n  ],\n  \"feedback\": \"The answer does not provide a clear process for complaining about a rude Uber Eats delivery person. It only mentions sending a note through the help link, which is not specific to Uber E",
+      "input_tokens": 2318,
+      "new_tokens": 256,
+      "total_ms": 6264.9
+    },
+    {
+      "id": "q033",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide detailed information about how Tesco handled faulty or poor-quality products in late 2017.\"\n}",
+      "input_tokens": 2522,
+      "new_tokens": 52,
+      "total_ms": 1669.8
+    },
+    {
+      "id": "q080",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I received a phishing email pretending to be from PayPal.\",\n    \"I should send it to PayPal’s reporting address so the team could look into it.\",\n    \"I should forward the fake or phishing email to that reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or phishing email to PayPal’s reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or phishing email to PayPal’s reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or phishing email to PayPal’s reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or phishing email to PayPal’s reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or phishing email to PayPal’s reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or phishing email to PayPal’s reporting address; they would then review it, take action, or archive it.\",\n    \"I should forward the fake or",
+      "input_tokens": 2259,
+      "new_tokens": 256,
+      "total_ms": 6363.2
+    },
+    {
+      "id": "q056",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My FIFA 18 disc won't load on Xbox even though I have the full game. What do I do?\",\n    \"In 2017, Xbox Support’s advice for a FIFA 18 disc that wouldn’t load even though the full game was on the disc was to delete FIFA 18, power cycle the console, then reinstall the game. That customer also said none of their disc games would load, and the agent still gave those same steps [#377295].\",\n    \"Other agents handled similar FIFA 18 disc problems differently. Some pointed people to Xbox’s guide for disc-reading issues [#285405] or the steps for Xbox One disc errors [#357841]. One asked the customer to follow Xbox Support and DM their Gamertag plus more details [#137960].\",\n    \"In a longer case where FIFA 18 still wasn’t recognized, the advice came in stages. After the customer said the disc-recognition guide didn’t work, the agent suggested contacting the retailer for an exchange. When the customer then asked if they could download the installation instead of installing from",
+      "input_tokens": 1807,
+      "new_tokens": 256,
+      "total_ms": 6267.2
+    },
+    {
+      "id": "q081",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"PayPal took money from my bank account instead of the payment method I chose. \"\n  ],\n  \"feedback\": \"The answer does not support the claim that PayPal took money from the customer's bank account instead of the payment method they chose. The cited conversations do not mention this specific issue. The answer should be revised to reflect the actual issue described in the question.\"\n}",
+      "input_tokens": 649,
+      "new_tokens": 92,
+      "total_ms": 2217.3
+    },
+    {
+      "id": "q009",
+      "supported": false,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My friend left her phone in an Uber and can't log in to her account. Can I contact the driver for her?\",\n    \"A few replies only sent a generic link about contacting the driver\",\n    \"This is from late 2017 and may have changed\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations that support the claim. The information provided is outdated and does not reflect current practices or policies.\"\n}",
+      "input_tokens": 1996,
+      "new_tokens": 108,
+      "total_ms": 2844.2
+    },
+    {
+      "id": "q019",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 4918,
+      "new_tokens": 42,
+      "total_ms": 2172.9
+    },
+    {
+      "id": "q010",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 4648,
+      "new_tokens": 42,
+      "total_ms": 2104.7
+    },
+    {
+      "id": "q035",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"British_Airways sells more tickets than there are seats on a flight\"\n  ],\n  \"feedback\": \"The answer does not cite any company agents saying British Airways sells more tickets than there are seats on a flight. The answer instead cites customer feedback and general knowledge about overbooking policies, which is unsupported.\"\n}",
+      "input_tokens": 2617,
+      "new_tokens": 80,
+      "total_ms": 2443.4
+    },
+    {
+      "id": "q057",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I keep getting disconnected at the end of Call of Duty WWII matches on Xbox and lose my XP.\",\n    \"I lose my XP when I get disconnected from the server.\",\n    \"I lose my XP when I get disconnected from the server after every game.\",\n    \"I lose my XP when I get disconnected from the server after every game, even if I have orders active.\"\n  ],\n  \"feedback\": \"The answer does not support the claim that the player loses XP when they get disconnected from the server. The answer cites several support conversations where agents confirmed that the issue was known and being investigated, but did not confirm that the player lost XP. The answer also does not provide any information about the specific issue of losing XP when getting disconnected.\"\n}",
+      "input_tokens": 4381,
+      "new_tokens": 167,
+      "total_ms": 5662.1
+    },
+    {
+      "id": "q058",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The chirping sound is described as a normal noise that the console makes when operating, and the customer can set the console for service if they are concerned.\"\n}",
+      "input_tokens": 569,
+      "new_tokens": 61,
+      "total_ms": 1464.5
+    },
+    {
+      "id": "q034",
+      "supported": false,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"British_Airways will let my BF know\"\n  ],\n  \"feedback\": \"The claim is unsupported as it is not a fair paraphrase of a company agent's statement. The claim is a customer's statement and not a company agent's statement.\"\n}",
+      "input_tokens": 4128,
+      "new_tokens": 69,
+      "total_ms": 2678.8
+    },
+    {
+      "id": "q011",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain unsupported claims.\"\n}",
+      "input_tokens": 1637,
+      "new_tokens": 32,
+      "total_ms": 1051.2
+    },
+    {
+      "id": "q036",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide information about the security lock for too many unsuccessful online check-in attempts and the need to wait 24 hours before attempting again.\"\n}",
+      "input_tokens": 1650,
+      "new_tokens": 58,
+      "total_ms": 1680.4
+    },
+    {
+      "id": "q059",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide detailed steps for powering cycle network devices and reconnecting them.\"\n}",
+      "input_tokens": 1558,
+      "new_tokens": 44,
+      "total_ms": 1233.2
+    },
+    {
+      "id": "q037",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 484,
+      "new_tokens": 21,
+      "total_ms": 565.9
+    },
+    {
+      "id": "q012",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The Spotify web player has been stuck playing one song silently for hours.\",\n    \"The play button did nothing.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on a song that wouldn’t play.\",\n    \"The web player was stuck on",
+      "input_tokens": 2479,
+      "new_tokens": 256,
+      "total_ms": 6798.8
+    },
+    {
+      "id": "q084",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 1506,
+      "new_tokens": 42,
+      "total_ms": 1281.0
+    },
+    {
+      "id": "q013",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations.\"\n}",
+      "input_tokens": 384,
+      "new_tokens": 30,
+      "total_ms": 778.0
+    },
+    {
+      "id": "q085",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The information provided is accurate and consistent with the support conversations.\"\n}",
+      "input_tokens": 2043,
+      "new_tokens": 42,
+      "total_ms": 1267.6
+    },
+    {
+      "id": "q083",
+      "supported": false,
+      "parsed": false,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Safaricom promotional SMS are treated as two different kinds of texts, and the opt-out steps depend on which you are getting.\",\n    \"These menus are from 2017 and may have changed.\",\n    \"Agents distinguished these marketing texts from premium-rate (PRS) SMS; one said a message of this kind was a marketing text, not a PRS SMS.\",\n    \"Cited conversations: Conversation #572335 · Safaricom_Care · 2017-11-14, Conversation #660672 · Safaricom_Care · 2017-11-22, Conversation #620752 · Safaricom_Care · 2017-11-19, Conversation #514388 · Safaricom_Care · 2017-11-09, Conversation #573434 · Safaricom_Care · 2017-11-15, Conversation #501394 · Safaricom_Care · 2017-11",
+      "input_tokens": 3170,
+      "new_tokens": 256,
+      "total_ms": 6687.4
+    },
+    {
+      "id": "q038",
+      "supported": false,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"VirginTrains do you offer money back on tickets if you are unable to sit at the seat you have reserved due to too many people on the train?\"\n  ],\n  \"feedback\": \"The claim about VirginTrains offering money back on tickets for being unable to sit at a reserved seat due to overcrowding is unsupported. This information is not mentioned in the cited conversations and may have changed since 2017.\"\n}",
+      "input_tokens": 3016,
+      "new_tokens": 103,
+      "total_ms": 3348.8
+    },
+    {
+      "id": "q014",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Songs I listen to every day suddenly disappeared from Spotify and my playlist. Why?\"\n  ],\n  \"feedback\": \"The answer does not support the claim that songs suddenly disappeared from Spotify and playlists. The answer discusses licensing changes and other legal issues, but does not address the specific claim about songs disappearing.\"\n}",
+      "input_tokens": 2646,
+      "new_tokens": 78,
+      "total_ms": 2357.4
+    },
+    {
+      "id": "q060",
+      "supported": false,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do?\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations from 2017, which is necessary to back up the claim. The answer also does not provide any information about how to fix the issue.\"\n}",
+      "input_tokens": 2443,
+      "new_tokens": 108,
+      "total_ms": 3053.2
+    },
+    {
+      "id": "q039",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My phone with my Virgin Trains mobile tickets might be dead by the time I travel.\",\n    \"If you only have a laptop and no other phone, agents said you would likely still need to buy another ticket, but advised calling Aftersales anyway in case they can do something else\",\n    \"Changing an e-ticket so you can collect a paper ticket at the station is not always possible; Aftersales are the ones to ask, and agents also said delivery method generally can’t be changed after purchase\"\n  ],\n  \"feedback\": \"The answer does not support the claim that the phone might be dead by the time of travel. The claim is unsupported and should be removed.\"\n}",
+      "input_tokens": 2225,
+      "new_tokens": 157,
+      "total_ms": 4085.0
+    },
+    {
+      "id": "q086",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The claim that Verizon agents asked customers to press and hold the reset pinhole on the back with a paperclip or toothpick and hold it until the front lights go off is unsupported.\",\n    \"The claim that Verizon agents asked customers to press and hold the alarm silence button for 15 seconds is unsupported.\",\n    \"The claim that Verizon agents asked customers to press and hold the blue ONT Reset button for 15 seconds is unsupported.\",\n    \"The claim that Verizon agents asked customers to press and hold the blue ONT Reset button for 20 seconds is unsupported.\",\n    \"The claim that Verizon agents asked customers to press and hold the blue ONT Reset button for 10-15 seconds is unsupported.\"\n  ],\n  \"feedback\": \"The answer contains unsupported claims. The claims should be supported by citing specific conversations from the provided Twitter threads.\"\n}",
+      "input_tokens": 5102,
+      "new_tokens": 192,
+      "total_ms": 6494.1
+    },
+    {
+      "id": "q062",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I have multiple PS4's in my house. I also play on my friends PS4 as well. I use my PSN account on them all. Recently I used one of my PS4's w my PSN and tonight I booted up my other PS4 cuz the other 1 is being used. My game licenses won't restore. Why?\"\n  ],\n  \"feedback\": \"The answer contains unsupported claims. The customer's experience with multiple PS4s and sharing games with friends is not supported by the cited conversations. The answer should be revised to reflect the actual steps and information provided in the conversations.\"\n}",
+      "input_tokens": 3480,
+      "new_tokens": 142,
+      "total_ms": 3999.1
+    },
+    {
+      "id": "q061",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection. Any fix?\",\n    \"My internet is fast but my PS4 gets poor",
+      "input_tokens": 2791,
+      "new_tokens": 256,
+      "total_ms": 6573.0
+    },
+    {
+      "id": "q015",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Spotify's Your Time Capsule keeps showing an error message even though I listen every day. What's wrong?\",\n    \"SpotifyCares: You can find Your Time Capsule at [link] We'd also suggest following it to keep it saved 🙂 /MG\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: Thanks! You can find Your Time Capsule at [link] We'd also suggest following it to keep it saved 🙂 /SY\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: Thanks! You can find Your Time Capsule at [link] We'd also suggest following it to keep it saved 🙂 /SY\",\n    \"SpotifyCares: Thanks! You can find Your Time Capsule at [link] We'd also suggest following it to keep it saved 🙂 /SY\",\n    \"SpotifyCares: Thanks! You can find Your Time Capsule at",
+      "input_tokens": 1642,
+      "new_tokens": 256,
+      "total_ms": 6509.4
+    },
+    {
+      "id": "q040",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I paid for Wi-Fi on a Virgin Trains train and it doesn't work. What should I do?\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations that support the claim. Instead, it provides general information about troubleshooting steps and contacting support, but does not cite any specific conversations.\"\n}",
+      "input_tokens": 2355,
+      "new_tokens": 81,
+      "total_ms": 2348.5
+    },
+    {
+      "id": "q063",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I spent a prestige token on the wrong weapon in Call of Duty WWII. Can Activision refund it?\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations from 2017, which is outdated information. The claim about the refund policy is unsupported and should be based on the 2017 support conversations provided.\"\n}",
+      "input_tokens": 928,
+      "new_tokens": 89,
+      "total_ms": 2117.7
+    },
+    {
+      "id": "q041",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"UPS says my package will arrive by 'end of day'. What time does that mean?\"\n  ],\n  \"feedback\": \"The answer does not support the claim that UPS says 'end of day' means a specific time, such as 7:00 PM or midnight. The answer provides information about how UPS defines 'end of day' and the variability in delivery times based on the driver's schedule and volume.\"\n}",
+      "input_tokens": 1343,
+      "new_tokens": 102,
+      "total_ms": 2496.7
+    },
+    {
+      "id": "q016",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Delta still hasn't found my delayed bag.\",\n    \"Can I get reimbursed for things I buy in the meantime?\"\n  ],\n  \"feedback\": \"The answer does not cite any conversations from 2017 that support the claim that Delta can reimburse customers for expenses incurred while their bags are delayed. The answer also does not provide details on the policy for reimbursement or the timeframe for processing the claim.\"\n}",
+      "input_tokens": 2311,
+      "new_tokens": 100,
+      "total_ms": 2721.4
+    },
+    {
+      "id": "q088",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which mention McDonald's bringing back Szechuan sauce in October and November 2017, with more sauce available in larger quantities in the winter.\"\n}",
+      "input_tokens": 1074,
+      "new_tokens": 61,
+      "total_ms": 1551.7
+    },
+    {
+      "id": "q089",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversation where a company agent explicitly stated that Marks & Spencer's pumpkin Percy Pigs are suitable for vegetarians but not vegans.\"\n}",
+      "input_tokens": 364,
+      "new_tokens": 54,
+      "total_ms": 1274.7
+    },
+    {
+      "id": "q065",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide information about the shipping policy for pre-orders at Target in 2017.\"\n}",
+      "input_tokens": 969,
+      "new_tokens": 49,
+      "total_ms": 1230.4
+    },
+    {
+      "id": "q087",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Verizon does not guarantee wireless connectivity because many factors can affect it\",\n    \"Game over Ethernet. They asked customers who were losing matches or having console trouble whether they had considered connecting the console to the router with an Ethernet cable. In an apartment-complex case, an agent said gaming wired may improve the experience because of interference\",\n    \"Reboot the router. If they thought it was wireless interference, they told people to reboot the router so it would come up on another channel, then test again\",\n    \"Change the wireless channel. Agents asked whether the customer had tried changing the channel to reduce interference\",\n    \"Use their analyzer tools. Agents mentioned a Wi-Fi analyzer in the My Fios app and told the customer to follow the on-screen steps\",\n    \"Check the band and nearby radios. They explained that some routers have a second network whose name ends in “5G,” with the password on the router label, if the device supports it\",\n    \"Check distance, lights, and a wired speed test. They asked whether the drop happened on all devices and how far those devices were from the router, and suggested a range extender when the router was in the basement\",\n    \"",
+      "input_tokens": 8835,
+      "new_tokens": 256,
+      "total_ms": 10998.0
+    },
+    {
+      "id": "q090",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The item I want is only in stock at another Marks & Spencer store.\",\n    \"Can they send it to my local store or post it?\"\n  ],\n  \"feedback\": \"The answer does not cite any conversations that support the claim that the item is only in stock at another Marks & Spencer store. The answer also does not address the customer's question about sending the item to a local store or posting it.\"\n}",
+      "input_tokens": 1557,
+      "new_tokens": 101,
+      "total_ms": 2600.7
+    },
+    {
+      "id": "q017",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Delta can unlock your account after too many failed login attempts.\"\n  ],\n  \"feedback\": \"The answer does not support the claim that Delta can unlock your account after too many failed login attempts. The provided information only mentions that the account will unlock itself after 24 hours, and Delta cannot set a temporary password. The claim is unsupported.\"\n}",
+      "input_tokens": 3192,
+      "new_tokens": 87,
+      "total_ms": 2646.5
+    },
+    {
+      "id": "q042",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"There is a way to get a more precise UPS delivery time than just 'out for delivery'.\"\n  ],\n  \"feedback\": \"The answer does not cite any information from the 2017 conversations provided. The claim is unsupported.\"\n}",
+      "input_tokens": 2726,
+      "new_tokens": 67,
+      "total_ms": 2030.7
+    },
+    {
+      "id": "q018",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The Delta agents in the conversations provided the necessary steps for filing a claim, including bringing the suitcase to the Baggage Service Office, reporting the damage within 24 hours for U.S. travel and within 7 days for international travel, and obtaining a file reference number from the Baggage Service Center or an airport agent.\"\n}",
+      "input_tokens": 6185,
+      "new_tokens": 95,
+      "total_ms": 4295.4
+    },
+    {
+      "id": "q067",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"GWR offers information or announcements in Welsh\"\n  ],\n  \"feedback\": \"The answer does not support the claim that GWR offers information or announcements in Welsh. The provided information only mentions that Welsh literature can be made available upon request and that some staff may make announcements in Welsh, but does not confirm that GWR offers information or announcements in Welsh.\"\n}",
+      "input_tokens": 3111,
+      "new_tokens": 89,
+      "total_ms": 2673.4
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "embedding": {
+    "fp32": {
+      "top10_chunk_overlap": 1.0,
+      "top10_conversation_overlap": 1.0,
+      "gold_hit_at_10": 0.5465116279069767,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 1.0,
+      "min_cosine_to_fp32": 0.9999998211860657
+    },
+    "fp16": {
+      "top10_chunk_overlap": 1.0,
+      "top10_conversation_overlap": 1.0,
+      "gold_hit_at_10": 0.5465116279069767,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 0.9999990463256836,
+      "min_cosine_to_fp32": 0.9999983906745911
+    },
+    "int8": {
+      "top10_chunk_overlap": 0.9750000000000001,
+      "top10_conversation_overlap": 0.9729166666666668,
+      "gold_hit_at_10": 0.5465116279069767,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 0.9991888403892517,
+      "min_cosine_to_fp32": 0.9988199472427368
+    },
+    "int4": {
+      "top10_chunk_overlap": 0.7916666666666666,
+      "top10_conversation_overlap": 0.7958333333333334,
+      "gold_hit_at_10": 0.5116279069767442,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 0.9664044380187988,
+      "min_cosine_to_fp32": 0.9557232856750488
+    }
+  },
+  "verifier": {
+    "fp16": {
+      "n": 86,
+      "agreement": 0.3372093023255814,
+      "agree_count": 29,
+      "always_supported_agreement": 0.9186046511627907,
+      "kappa": 0.0323726806158705,
+      "flagged": 7,
+      "flagged_caught": 6,
+      "false_alarms": 56,
+      "unparsed": 0,
+      "said_supported": 24,
+      "agreement_with_fp16": 1.0
+    },
+    "int8": {
+      "n": 86,
+      "agreement": 0.45348837209302323,
+      "agree_count": 39,
+      "always_supported_agreement": 0.9186046511627907,
+      "kappa": 0.03807710613993332,
+      "flagged": 7,
+      "flagged_caught": 5,
+      "false_alarms": 45,
+      "unparsed": 0,
+      "said_supported": 36,
+      "agreement_with_fp16": 0.8604651162790697
+    },
+    "int4": {
+      "n": 86,
+      "agreement": 0.5465116279069767,
+      "agree_count": 47,
+      "always_supported_agreement": 0.9186046511627907,
+      "kappa": -0.05009392611145919,
+      "flagged": 7,
+      "flagged_caught": 2,
+      "false_alarms": 34,
+      "unparsed": 0,
+      "said_supported": 50,
+      "agreement_with_fp16": 0.627906976744186
+    }
+  }
+}

@@ -1,0 +1,892 @@
+{
+  "model": "Qwen2.5-1.5B-Instruct",
+  "precision": "int4",
+  "device": "GPU",
+  "load_s": 15.75,
+  "speed": {
+    "short": {
+      "input_tokens": 61,
+      "new_tokens": 128,
+      "ttft_ms": 36.6,
+      "tpot_ms": 15.1,
+      "decode_tokens_per_s": 66.2,
+      "prefill_tokens_per_s": 1664.7
+    },
+    "verifier": {
+      "input_tokens": 1839,
+      "new_tokens": 128,
+      "ttft_ms": 273.8,
+      "tpot_ms": 16.77,
+      "decode_tokens_per_s": 59.6,
+      "prefill_tokens_per_s": 6715.9
+    }
+  },
+  "constrained_decoding": true,
+  "verifier_items": 86,
+  "verifier_wall_s": 175.1,
+  "peak_rss_mb": 1082.9,
+  "baseline_rss_mb": 563.7,
+  "gpu_mem_mb": 1026.2,
+  "verdicts": [
+    {
+      "id": "q043",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The customer needs to reschedule their UPS new-hire orientation because the phone number on the paperwork is invalid.\",\n    \"The customer has no way of contacting the HR department at the UPS facility located on Vero Road in Maryland.\"\n  ],\n  \"feedback\": \"The answer does not support the claim that the customer needs to reschedule their orientation because the phone number on the paperwork is invalid. The answer suggests that the customer should sign in on the UPS site and reschedule there, but it does not provide information about the validity of the phone number on the paperwork.\"\n}",
+      "input_tokens": 542,
+      "new_tokens": 132,
+      "total_ms": 2442.4
+    },
+    {
+      "id": "q091",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Resetting the password won't work. Please let us know if you don't get an e-mail from our Account Specialists by tomorrow.\",\n    \"Resetting the password won't work. Please let us know if you don't get an e-mail from our Account Specialists by tomorrow.\"\n  ],\n  \"feedback\": \"The answer does not cite any Netflix support conversations. The customer is directed to Amazon Help, which is not Netflix's support. The answer does not provide any information on how to reset a Netflix password.\"\n}",
+      "input_tokens": 1006,
+      "new_tokens": 121,
+      "total_ms": 2156.3
+    },
+    {
+      "id": "q068",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain any unsupported claims.\"\n}",
+      "input_tokens": 4143,
+      "new_tokens": 33,
+      "total_ms": 1534.6
+    },
+    {
+      "id": "q020",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Delta should have policies against discrimination and bullying.\",\n    \"Delta should have formal complaint forms available.\",\n    \"Delta should have a complaint hotline available.\",\n    \"Delta should have a complaint form available for local law enforcement.\",\n    \"Delta should have a complaint form available for the Customer Care team.\",\n    \"Delta should have a complaint form available for the Corporate Customer Care department.\",\n    \"Delta should have a complaint form available for the Inflight Leadership team.\",\n    \"Delta should have a complaint form available for the Customer Care department.\",\n    \"Delta should have a complaint form available for the Corporate office with the Comment/Complaint form.\",\n    \"Delta should have a complaint form available for the Customer Care department at 800 455 2720.\",\n    \"Delta should have a complaint form available for the Customer Care department at 800 455 2720 prompt 1/4.\",\n    \"Delta should have a complaint form available for the Corporate Customer Care department at 800 455 2720.\",\n    \"Delta should have a complaint form available for the Corporate Customer Care department at 800 ",
+      "input_tokens": 4788,
+      "new_tokens": 256,
+      "total_ms": 5649.2
+    },
+    {
+      "id": "q021",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1816,
+      "new_tokens": 32,
+      "total_ms": 893.1
+    },
+    {
+      "id": "q044",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1336,
+      "new_tokens": 21,
+      "total_ms": 629.8
+    },
+    {
+      "id": "q045",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"UPS said they cannot speed up or control Kuwait (or other) government customs.\",\n    \"When documentation was the issue, they pointed people to the shipper rather than saying UPS would clear it.\",\n    \"They sometimes offered to have a local team follow up if you provided contact details, or to check a tracking number you sent them, but in the Kuwait customs case they checked, they concluded nothing further could be done until customs released the package.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations from 2017, and the information provided is not supported by the cited conversations.\"\n}",
+      "input_tokens": 1803,
+      "new_tokens": 141,
+      "total_ms": 2766.4
+    },
+    {
+      "id": "q022",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1708,
+      "new_tokens": 21,
+      "total_ms": 637.8
+    },
+    {
+      "id": "q046",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"hulu_support: Got it. Please try: [link] --particularly power cycling your equipment. Is there any improvement after?\",\n    \"hulu_support: Our app tends to be more demanding, especially when streaming live. Did the steps we included help with the issue?\"\n  ],\n  \"feedback\": \"The answer does not cite any specific company agents saying it is supported. Instead, it cites general knowledge and other company agents, making it unsupported.\"\n}",
+      "input_tokens": 3439,
+      "new_tokens": 109,
+      "total_ms": 2599.3
+    },
+    {
+      "id": "q023",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"AmericanAir should let us know when they delay you and put you on an antique plane w no plugs, no legroom which I paid for and NO TVs\",\n    \"AmericanAir What about a refund for the extra leg room I paid quite a bit for, since this plane did not have that in my row at all!?\",\n    \"AmericanAir What about a refund for the extra leg room I paid quite a bit for, since this plane did not have that in my row at all!?\",\n    \"AmericanAir What about a refund for the extra leg room I paid quite a bit for, since this plane did not have that in my row at all!?\",\n    \"AmericanAir What about a refund for the extra leg room I paid quite a bit for, since this plane did not have that in my row at all!?\",\n    \"AmericanAir What about a refund for the extra leg room I paid quite a bit for, since this plane did not have that in my row at all!?\",\n    \"AmericanAir What about a refund for the extra leg room I paid quite a bit for, since this plane did not have that in my row at all!?\",\n    \"AmericanAir",
+      "input_tokens": 1718,
+      "new_tokens": 256,
+      "total_ms": 4620.1
+    },
+    {
+      "id": "q025",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 601,
+      "new_tokens": 21,
+      "total_ms": 802.4
+    },
+    {
+      "id": "q047",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations, which provide the necessary troubleshooting steps.\"\n}",
+      "input_tokens": 626,
+      "new_tokens": 37,
+      "total_ms": 706.0
+    },
+    {
+      "id": "q071",
+      "supported": true,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [\n    \"Return it.\",\n    \"If the driver has already left.\",\n    \"Price difference.\",\n    \"Next time.\",\n    \"Return it with the driver for a full refund.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left.\",\n    \"If the driver has already left",
+      "input_tokens": 4411,
+      "new_tokens": 256,
+      "total_ms": 5556.1
+    },
+    {
+      "id": "q070",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. No unsupported claims were found.\"\n}",
+      "input_tokens": 5021,
+      "new_tokens": 36,
+      "total_ms": 1806.4
+    },
+    {
+      "id": "q048",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2664,
+      "new_tokens": 32,
+      "total_ms": 1034.6
+    },
+    {
+      "id": "q072",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2710,
+      "new_tokens": 32,
+      "total_ms": 1031.1
+    },
+    {
+      "id": "q001",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 916,
+      "new_tokens": 32,
+      "total_ms": 715.3
+    },
+    {
+      "id": "q027",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The OSU–Wisconsin game was not available on a mobile device because of licensing agreements.\"\n  ],\n  \"feedback\": \"The claim about the licensing agreements is unsupported as it is not directly cited in the provided conversations. The customer's question and the agent's response are not directly related to the licensing agreements.\"\n}",
+      "input_tokens": 690,
+      "new_tokens": 81,
+      "total_ms": 1462.4
+    },
+    {
+      "id": "q026",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Was the recent Comcast internet outage caused by Level 3?\"\n  ],\n  \"feedback\": \"The answer is unsupported because it cites a conversation from 2017, which is not recent. The answer should be updated to reflect the current information.\"\n}",
+      "input_tokens": 2261,
+      "new_tokens": 69,
+      "total_ms": 1554.8
+    },
+    {
+      "id": "q049",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the conversations cited.\"\n}",
+      "input_tokens": 1576,
+      "new_tokens": 32,
+      "total_ms": 789.4
+    },
+    {
+      "id": "q073",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The answer is correct.\"\n}",
+      "input_tokens": 1902,
+      "new_tokens": 35,
+      "total_ms": 895.2
+    },
+    {
+      "id": "q074",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1194,
+      "new_tokens": 32,
+      "total_ms": 717.5
+    },
+    {
+      "id": "q002",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The retail/customer-service side of Twitter support said it could not address seller-account issues and pointed people to the concerned team or told them to wait for Seller Support.\",\n    \"The performance email address was bouncing back and the customer needed to contact the performance department.\",\n    \"The customer needed to contact the performance department to get the correct email address.\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations that directly support the answer. The unsupported claims are not supported by the cited conversations.\"\n}",
+      "input_tokens": 4817,
+      "new_tokens": 118,
+      "total_ms": 2965.7
+    },
+    {
+      "id": "q050",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Chipotle’s Twitter support did not name any restaurants that still had soft corn tortillas.\",\n    \"In October–November 2017, agents said the soft ones had been eliminated because they weren’t the best sellers, to streamline operations, and that they had been taken off the menu.\",\n    \"When a guest asked which cities still had them, an agent said they were phasing the soft corn tortillas out entirely and pointed to a link for other ideas, without naming any cities.\",\n    \"When a guest said their local Chipotle still had them that day, an agent said they are a discontinued item, but there may be some supply still floating around.\",\n    \"When a guest said the UNT Denton, Texas location told them corn tortillas were discontinued, an agent confirmed that they had discontinued them and that the crispy ones were still available.\",\n    \"Other agents pointed guests to crispy corn tortillas, or to crispy corn chips and taco shells.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific Chipotle restaurants that still have soft corn tortillas. The information provided is outdated and may not reflect the current status of the soft corn tortillas.\"\n}",
+      "input_tokens": 1105,
+      "new_tokens": 256,
+      "total_ms": 6995.2
+    },
+    {
+      "id": "q098",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"How much does Sony charge to repair a PS5 DualSense controller\"\n  ],\n  \"feedback\": \"The answer is unsupported because it cites two conversations, but neither mentions the specific question about PS5 DualSense repair pricing.\"\n}",
+      "input_tokens": 451,
+      "new_tokens": 63,
+      "total_ms": 1425.2
+    },
+    {
+      "id": "q075",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 640,
+      "new_tokens": 21,
+      "total_ms": 500.3
+    },
+    {
+      "id": "q028",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1656,
+      "new_tokens": 21,
+      "total_ms": 701.4
+    },
+    {
+      "id": "q051",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 922,
+      "new_tokens": 32,
+      "total_ms": 795.2
+    },
+    {
+      "id": "q003",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2287,
+      "new_tokens": 32,
+      "total_ms": 1107.6
+    },
+    {
+      "id": "q005",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"\"\n}",
+      "input_tokens": 1131,
+      "new_tokens": 21,
+      "total_ms": 650.7
+    },
+    {
+      "id": "q029",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1071,
+      "new_tokens": 32,
+      "total_ms": 803.3
+    },
+    {
+      "id": "q052",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My coworkers got a free chips and guac offer in the Chipotle app but I didn't. Why?\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations from Chipotle's Twitter support in 2017, which is necessary to support the claim.\"\n}",
+      "input_tokens": 1440,
+      "new_tokens": 76,
+      "total_ms": 1586.9
+    },
+    {
+      "id": "q076",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"O2 can see what the data was used on\",\n    \"O2 can itemise usage for you\",\n    \"O2 can tell you how much data was used in a month\",\n    \"O2 can tell you how much data was used in a week\",\n    \"O2 can tell you how much data was used in a day\",\n    \"O2 can tell you how much data was used in an hour\",\n    \"O2 can tell you how much data was used in a minute\",\n    \"O2 can tell you how much data was used in a second\",\n    \"O2 can tell you how much data was used in a millisecond\",\n    \"O2 can tell you how much data was used in a picosecond\",\n    \"O2 can tell you how much data was used in a femtosecond\",\n    \"O2 can tell you how much data was used in a nanosecond\",\n    \"O2 can tell you how much data was used in a microsecond\",\n    \"O2 can tell you how much data was used in a millisecond\",\n    \"O2 can tell you how much data was used in a second\",\n",
+      "input_tokens": 4237,
+      "new_tokens": 256,
+      "total_ms": 5496.1
+    },
+    {
+      "id": "q030",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Southwest notifies you when fares drop on a route you're watching\"\n  ],\n  \"feedback\": \"The answer is unsupported because the cited conversations do not mention a notification system for fare drops. The agent only mentioned signing up for alerts or checking the Low Fare Calendar, not a notification system.\"\n}",
+      "input_tokens": 704,
+      "new_tokens": 77,
+      "total_ms": 1398.9
+    },
+    {
+      "id": "q006",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"If I schedule an Uber ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n    \"If I schedule a ride in advance, am I guaranteed a driver?\",\n   ",
+      "input_tokens": 1851,
+      "new_tokens": 256,
+      "total_ms": 4828.4
+    },
+    {
+      "id": "q031",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The NBC Sports app doesn't work with my Spectrum account on Fire Stick because of distribution agreements between Spectrum and NBC Sports.\"\n  ],\n  \"feedback\": \"The answer should include the specific reason why the app is unavailable to Charter (Spectrum) users on Fire Stick, such as 'because of distribution agreements between Spectrum and NBC Sports.'\"\n}",
+      "input_tokens": 463,
+      "new_tokens": 86,
+      "total_ms": 1517.6
+    },
+    {
+      "id": "q077",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2590,
+      "new_tokens": 32,
+      "total_ms": 1036.4
+    },
+    {
+      "id": "q053",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1675,
+      "new_tokens": 32,
+      "total_ms": 870.3
+    },
+    {
+      "id": "q054",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Forza Motorsport 7 goes to a black screen after the driver selection cutscene on my Xbox\",\n    \"Is there a fix for this issue?\",\n    \"Xbox Support's advice for a Forza 7 black screen as the pick-your-gender/racer cutscene ends was to close the game and reopen it if the screen kept appearing, then try removing and re-adding the Xbox profile. After that they said the issue was being looked into by the proper teams and asked for patience. They did not state a confirmed fix in that thread. This is from 2017 and may have changed since.\",\n    \"Cited conversations:\"\n  ],\n  \"feedback\": \"The answer does not cite any specific information from the 2017 support thread. The answer should include the specific advice given by Xbox Support in the 2017 thread.\"\n}",
+      "input_tokens": 687,
+      "new_tokens": 195,
+      "total_ms": 3357.0
+    },
+    {
+      "id": "q078",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Can O2 add a family discount to my existing contracts?\",\n    \"The Family Plan discount can only be added at renewal.\",\n    \"An offer of a discount on additional family lines would apply to upgrading or new connections, not to existing lines.\",\n    \"If you’ve taken out an O2 Refresh tariff you may be able to get that discount when adding another phone.\",\n    \"When a customer said their Family Plan looked applied, the agent said the original price will always show and the amount will be taken from the next bill.\",\n    \"On a friends and family discount already on an account, an agent said that if you resign on a new contract you’d need to re-apply for the discount.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations or agents, and the unsupported claims are not supported by the information provided.\"\n}",
+      "input_tokens": 2082,
+      "new_tokens": 189,
+      "total_ms": 3656.6
+    },
+    {
+      "id": "q032",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The SC code Tesco asked for is the supplier code.\",\n    \"The SC code is on the packaging, usually on the back beside or just below the Tesco address, near the barcode.\",\n    \"A supplier code is only visible if it is a Tesco branded item.\",\n    \"On a Nature Valley product a customer asked about, an agent said there was no SC code on that product.\"\n  ],\n  \"feedback\": \"The answer does not support the claims made in the question. The unsupported claims are: 'The SC code Tesco asked for is the supplier code.', 'The SC code is on the packaging, usually on the back beside or just below the Tesco address, near the barcode.', 'A supplier code is only visible if it is a Tesco branded item.', 'On a Nature Valley product a customer asked about, an agent said there was no SC code on that product.'\"\n}",
+      "input_tokens": 2425,
+      "new_tokens": 201,
+      "total_ms": 4008.6
+    },
+    {
+      "id": "q079",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The Priority Star Wars phone-case codes ran out very quickly because the offer was so popular. When a customer redeemed a code and the checkout price did not drop, agents told them they had missed out that time.\",\n    \"Agents gave related explanations depending on the day and the error:\"\n    ],\n  \"feedback\": \"The answer does not cite any specific conversations or support the information provided in the question. The unsupported claims are not supported by the cited conversations.\"\n}",
+      "input_tokens": 980,
+      "new_tokens": 109,
+      "total_ms": 2072.7
+    },
+    {
+      "id": "q008",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1229,
+      "new_tokens": 32,
+      "total_ms": 780.9
+    },
+    {
+      "id": "q055",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is supported by the cited conversations. The answer is correct.\"\n}",
+      "input_tokens": 1834,
+      "new_tokens": 35,
+      "total_ms": 920.8
+    },
+    {
+      "id": "q007",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"How do I complain about a rude Uber Eats delivery person?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"How do I report a rude driver who was not my own?\",\n    \"",
+      "input_tokens": 2318,
+      "new_tokens": 256,
+      "total_ms": 5000.4
+    },
+    {
+      "id": "q033",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2522,
+      "new_tokens": 32,
+      "total_ms": 1030.8
+    },
+    {
+      "id": "q080",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2259,
+      "new_tokens": 32,
+      "total_ms": 989.1
+    },
+    {
+      "id": "q056",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"FIFA 18 disc won't load on Xbox even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the disc\",\n    \"FIFA 18 disc won't load even though I have the full game on the",
+      "input_tokens": 1807,
+      "new_tokens": 256,
+      "total_ms": 4761.4
+    },
+    {
+      "id": "q081",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"PayPal took money from my bank account instead of the payment method I chose.\",\n    \"PayPal's security system prevented the card from being used when the payment was completed.\"\n  ],\n  \"feedback\": \"The answer does not cite any information from 2017, and the customer's claim is unsupported as it is a fair paraphrase of the claim made by a PayPal agent in 2017.\"\n}",
+      "input_tokens": 649,
+      "new_tokens": 103,
+      "total_ms": 1755.4
+    },
+    {
+      "id": "q009",
+      "supported": false,
+      "parsed": false,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My friend left her phone in an Uber and can't log in to her account because it requires two-step verification. How can she get in contact with her driver to see if she left her phone in her Uber?\",\n    \"My friend left her phone in this car today and the driver will not respond to us. Can you help. TY. 🙃 [link]\",\n    \"My friend lost her phone in Uber and we need help contacting the driver. Please help us contact the driver\",\n    \"My friend left her phone in the Uber and we've been trying to contact the driver since, not responding. Please help us contact the driver\",\n    \"My friend left her phone in the Uber and she can't log into her account without her phone. How can she get in contact with her driver to see if she left her phone in her Uber?\",\n    \"My friend left her phone in the car and can't sign into the app because it is sending SMS to phone. How can she login?\",\n    \"My friend lost her phone in Uber and we need help contacting the driver. Please help us contact the driver\",\n    \"My friend left her phone in the Uber and she can't",
+      "input_tokens": 1996,
+      "new_tokens": 256,
+      "total_ms": 4761.0
+    },
+    {
+      "id": "q019",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 4918,
+      "new_tokens": 32,
+      "total_ms": 1599.9
+    },
+    {
+      "id": "q010",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain unsupported claims.\"\n}",
+      "input_tokens": 4648,
+      "new_tokens": 32,
+      "total_ms": 1426.7
+    },
+    {
+      "id": "q035",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"British_Airways Most airlines have a different approach. Usually asking at checkin or the gate if passengers would like to catch a later flight. Not BA thou\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations that directly support the claim. The unsupported claim is not supported by any information from the cited conversations.\"\n}",
+      "input_tokens": 2617,
+      "new_tokens": 86,
+      "total_ms": 1934.9
+    },
+    {
+      "id": "q057",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain unsupported claims.\"\n}",
+      "input_tokens": 4381,
+      "new_tokens": 32,
+      "total_ms": 1363.3
+    },
+    {
+      "id": "q058",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The chirping sound is a confirmed defect\",\n    \"The customer can ignore the chirping sound\",\n    \"The service charge applies if the console is out of warranty\"\n  ],\n  \"feedback\": \"The answer does not support the claim that the chirping sound is a confirmed defect. The customer should be advised to check the console for service.\"\n}",
+      "input_tokens": 569,
+      "new_tokens": 88,
+      "total_ms": 1522.9
+    },
+    {
+      "id": "q034",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain any unsupported claims.\"\n}",
+      "input_tokens": 4128,
+      "new_tokens": 33,
+      "total_ms": 1282.6
+    },
+    {
+      "id": "q011",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1637,
+      "new_tokens": 32,
+      "total_ms": 796.3
+    },
+    {
+      "id": "q036",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1650,
+      "new_tokens": 32,
+      "total_ms": 823.0
+    },
+    {
+      "id": "q059",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1558,
+      "new_tokens": 32,
+      "total_ms": 789.4
+    },
+    {
+      "id": "q037",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"British Airways flight BA2278 from Oakland was cancelled on 18 November due to a technical issue with the aircraft.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversation or support from a company agent. It is unsupported.\"\n}",
+      "input_tokens": 484,
+      "new_tokens": 70,
+      "total_ms": 1197.8
+    },
+    {
+      "id": "q012",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and matches the information provided in the cited conversations.\"\n}",
+      "input_tokens": 2479,
+      "new_tokens": 35,
+      "total_ms": 1037.6
+    },
+    {
+      "id": "q084",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1506,
+      "new_tokens": 32,
+      "total_ms": 785.9
+    },
+    {
+      "id": "q013",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 384,
+      "new_tokens": 32,
+      "total_ms": 783.3
+    },
+    {
+      "id": "q085",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited Safaricom support conversations.\"\n}",
+      "input_tokens": 2043,
+      "new_tokens": 36,
+      "total_ms": 915.2
+    },
+    {
+      "id": "q083",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain unsupported claims.\"\n}",
+      "input_tokens": 3170,
+      "new_tokens": 32,
+      "total_ms": 1083.6
+    },
+    {
+      "id": "q038",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain any unsupported claims.\"\n}",
+      "input_tokens": 3016,
+      "new_tokens": 33,
+      "total_ms": 1099.5
+    },
+    {
+      "id": "q014",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer provided does not contain any unsupported claims.\"\n}",
+      "input_tokens": 2646,
+      "new_tokens": 31,
+      "total_ms": 984.6
+    },
+    {
+      "id": "q060",
+      "supported": false,
+      "parsed": false,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game. What can I do to get it to work?\",\n    \"A PS4 trophy I earned won't unlock even after reinstalling the game.",
+      "input_tokens": 2443,
+      "new_tokens": 256,
+      "total_ms": 4784.8
+    },
+    {
+      "id": "q039",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain unsupported claims.\"\n}",
+      "input_tokens": 2225,
+      "new_tokens": 32,
+      "total_ms": 889.3
+    },
+    {
+      "id": "q086",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"None of the unsupported claims are present in the answer.\"\n}",
+      "input_tokens": 5102,
+      "new_tokens": 32,
+      "total_ms": 1721.2
+    },
+    {
+      "id": "q062",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [\n    \"I have multiple PS4's in my house. I also play on my friend's PS4 as well. I use my PSN account on them all. Recently I used one of my PS4's w my PSN and tonight I booted up my other PS4 cuz the other 1 is being used. My game licenses won't restore. Why?\",\n    \"I figured it out on my own.\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations or agents, but rather provides general information about the content lock and steps to resolve it.\"\n}",
+      "input_tokens": 3480,
+      "new_tokens": 134,
+      "total_ms": 3085.1
+    },
+    {
+      "id": "q061",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"My internet is fast but my PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a wired connection.\",\n    \"My PS4 gets poor upload speeds even on a",
+      "input_tokens": 2791,
+      "new_tokens": 256,
+      "total_ms": 5032.8
+    },
+    {
+      "id": "q015",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"SpotifyCares: You can find Your Time Capsule at [link] We'd also suggest following it to keep it saved 🙂 /MG\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: You're welcome. If you need more help, you can always reach us here. Have a great day 😁 /SY\",\n    \"SpotifyCares: You're welcome. If",
+      "input_tokens": 1642,
+      "new_tokens": 256,
+      "total_ms": 4623.8
+    },
+    {
+      "id": "q040",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain unsupported claims.\"\n}",
+      "input_tokens": 2355,
+      "new_tokens": 32,
+      "total_ms": 990.4
+    },
+    {
+      "id": "q063",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"I spent a prestige token on the wrong weapon in Call of Duty WWII. Can Activision refund it?\"\n  ],\n  \"feedback\": \"The answer does not cite any support conversations from 2017, and the claim is unsupported as it is not a fair paraphrase of a company agent's statement.\"\n}",
+      "input_tokens": 928,
+      "new_tokens": 81,
+      "total_ms": 1475.2
+    },
+    {
+      "id": "q041",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 1343,
+      "new_tokens": 32,
+      "total_ms": 748.8
+    },
+    {
+      "id": "q016",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Delta still hasn't found my delayed bag. Can I get reimbursed for things I buy in the meantime?\",\n    \"Delta wish I knew where my 3 bags are. Agent promised update hours ago. Wondering how much I’ll have to spend on clothes&amp;toiletries before meetings...what’s platinum for??\"\n    ,\n    \"Delta wish I knew where my 3 bags are. Agent promised update hours ago. Wondering how much I’ll have to spend on clothes&amp;toiletries before meetings...what’s platinum for??\"\n    ,\n    \"Delta wish I knew where my 3 bags are. Agent promised update hours ago. Wondering how much I’ll have to spend on clothes&amp;toiletries before meetings...what’s platinum for??\"\n    ,\n    \"Delta wish I knew where my 3 bags are. Agent promised update hours ago. Wondering how much I’ll have to spend on clothes&amp;toiletries before meetings...what’s platinum for??\"\n    ,\n    \"Delta wish I knew where my 3 bags are. Agent promised update hours ago. Wondering how much I’ll have to spend on clothes&amp;toile",
+      "input_tokens": 2311,
+      "new_tokens": 256,
+      "total_ms": 4914.2
+    },
+    {
+      "id": "q088",
+      "supported": true,
+      "parsed": true,
+      "original_supported": false,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct. The claim is supported by the cited conversations.\"\n}",
+      "input_tokens": 1074,
+      "new_tokens": 35,
+      "total_ms": 789.8
+    },
+    {
+      "id": "q089",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Are Marks & Spencer's pumpkin Percy Pigs vegan?\"\n  ],\n  \"feedback\": \"The answer is unsupported because it cites a conversation from 2017, which is not recent enough to be considered current information.\"\n}",
+      "input_tokens": 364,
+      "new_tokens": 63,
+      "total_ms": 1278.4
+    },
+    {
+      "id": "q065",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 969,
+      "new_tokens": 32,
+      "total_ms": 750.2
+    },
+    {
+      "id": "q087",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Game over Ethernet. \"\n  ],\n  \"feedback\": \"The answer does not cite any information from the 2017 conversations. The claim 'Game over Ethernet' is unsupported.\"\n}",
+      "input_tokens": 8835,
+      "new_tokens": 56,
+      "total_ms": 3271.3
+    },
+    {
+      "id": "q090",
+      "supported": false,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"The item is only in another store (and not available to order online)\"\n  ],\n  \"feedback\": \"The answer does not cite any specific conversations that support the claim. The claim is unsupported.\"\n}",
+      "input_tokens": 1557,
+      "new_tokens": 58,
+      "total_ms": 1227.8
+    },
+    {
+      "id": "q017",
+      "supported": false,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": false,\n  \"unsupported_claims\": [\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the last failed login attempt\",\n    \"Delta can unlock my account after 24 hours from the",
+      "input_tokens": 3192,
+      "new_tokens": 256,
+      "total_ms": 5177.8
+    },
+    {
+      "id": "q042",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and supported by the cited conversations.\"\n}",
+      "input_tokens": 2726,
+      "new_tokens": 32,
+      "total_ms": 1020.0
+    },
+    {
+      "id": "q018",
+      "supported": true,
+      "parsed": false,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [\n    \"Delta agents in 2017 treated a ripped suitcase as a damaged-baggage claim\",\n    \"Delta did not all give the same steps for filing a claim\",\n    \"Delta did not all agree on the phone number to file a claim\",\n    \"Delta did not all agree on the online claim form\",\n    \"Delta did not all agree on the file reference number\",\n    \"Delta did not all agree on the claim deadline\",\n    \"Delta did not all agree on the Baggage Service Office location\",\n    \"Delta did not all agree on the Baggage Service Office phone number\",\n    \"Delta did not all agree on the Baggage Service Office opening hours\",\n    \"Delta did not all agree on the Baggage Service Office location\",\n    \"Delta did not all agree on the Baggage Service Office phone number\",\n    \"Delta did not all agree on the Baggage Service Office opening hours\",\n    \"Delta did not all agree on the Baggage Service Office location\",\n    \"Delta did not all agree on the Baggage Service Office phone number\",\n    \"Delta did not all agree on the Baggage Service Office opening hours\",\n    \"Delta did not all agree on the Bag",
+      "input_tokens": 6185,
+      "new_tokens": 256,
+      "total_ms": 5901.1
+    },
+    {
+      "id": "q067",
+      "supported": true,
+      "parsed": true,
+      "original_supported": true,
+      "reply": "{\n  \"supported\": true,\n  \"unsupported_claims\": [],\n  \"feedback\": \"The answer is correct and does not contain any unsupported claims.\"\n}",
+      "input_tokens": 3111,
+      "new_tokens": 33,
+      "total_ms": 1124.8
+    }
+  ]
+}

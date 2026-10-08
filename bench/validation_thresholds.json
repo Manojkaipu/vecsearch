@@ -1,0 +1,39 @@
+{
+  "basis": "set 2026-10-08 from runs on an Intel Core Ultra 7 256V laptop with an Arc 140V (WSL2, AC power), a little below the measured values; the measured value is in each comment",
+  "correctness": {
+    "_comment": "bench/validate.py counts what pytest and GoogleTest report: 181 OpenCL pytest cases and 104 OpenCL GoogleTest cases at the time of writing",
+    "min_pytest_passed": 170,
+    "min_gtest_passed": 100
+  },
+  "benchmark": {
+    "_comment": "1M x 384, k=10, inner product; qps is the median of three sweeps. Run-to-run spread was 7% at batch 1 and under 3.5% elsewhere, thermals added up to about 15%, so a regression has to cost 20% to fail",
+    "batches": [1, 8, 128, 1024],
+    "min_recall": 0.999,
+    "min_fraction_of_baseline": 0.8,
+    "baselines": {
+      "Intel(R) Graphics [0x64a0]": {
+        "n": 1000000,
+        "qps": {"1": 58.9, "8": 434.1, "128": 1990.7, "1024": 1805.6}
+      }
+    },
+    "min_speedup_over_cpu": {"128": 3.0, "1024": 3.0}
+  },
+  "embeddings": {
+    "_comment": "MiniLM on the GPU, 96 questions, support-rag's HNSW index. Measured: top-10 overlap FP16 1.000, INT8 0.975, INT4 0.792; mean cosine 1.0, 0.9992, 0.9664; source-in-top-10 drop vs FP32 0, 0, 0.035",
+    "min_top10_chunk_overlap": {"fp16": 0.99, "int8": 0.95, "int4": 0.75},
+    "min_mean_cosine": {"fp16": 0.9999, "int8": 0.998, "int4": 0.95},
+    "max_hit10_drop": {"fp16": 0.01, "int8": 0.02, "int4": 0.08},
+    "_comment_ratios": "measured INT4/FP16: peak RSS 1.22 (higher: weights are expanded at load), chunks/s 0.82 (slower: the model is too small for 4-bit weights to pay off on this GPU)",
+    "max_int4_rss_ratio": 1.4,
+    "min_int4_speed_ratio": 0.7
+  },
+  "llm": {
+    "_comment": "Qwen2.5-1.5B-Instruct as support-rag's verifier on the GPU, 86 stored answers. There is no threshold on agreement with the original verifier: at every precision it is far below the 92% of always saying 'supported' (FP16 34%, INT8 45%, INT4 55%, kappa about 0), so it measures the model, not the quantization. The checks guard what quantization changes. Measured: agreement with FP16 INT8 0.86, INT4 0.63; kappa 0.03, 0.04, -0.05; decode INT4/FP16 2.4x; peak RSS 0.88; GPU allocation 0.32",
+    "min_agreement_with_fp16": {"int8": 0.75, "int4": 0.5},
+    "min_kappa_vs_original": {"fp16": -0.1, "int8": -0.1, "int4": -0.15},
+    "max_unparsed": 0,
+    "min_int4_decode_speed_ratio": 1.8,
+    "max_int4_rss_ratio": 1.0,
+    "max_int4_gpu_mem_ratio": 0.45
+  }
+}

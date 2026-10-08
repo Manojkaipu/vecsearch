@@ -1,0 +1,37 @@
+{
+  "embedding": {
+    "fp32": {
+      "top10_chunk_overlap": 1.0,
+      "top10_conversation_overlap": 1.0,
+      "gold_hit_at_10": 0.5465116279069767,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 1.0,
+      "min_cosine_to_fp32": 0.9999998211860657
+    },
+    "fp16": {
+      "top10_chunk_overlap": 0.9989583333333334,
+      "top10_conversation_overlap": 0.9989583333333334,
+      "gold_hit_at_10": 0.5465116279069767,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 0.9999997615814209,
+      "min_cosine_to_fp32": 0.9999994039535522
+    },
+    "int8": {
+      "top10_chunk_overlap": 0.9833333333333334,
+      "top10_conversation_overlap": 0.9822916666666668,
+      "gold_hit_at_10": 0.5465116279069767,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 0.9995881915092468,
+      "min_cosine_to_fp32": 0.9994544982910156
+    },
+    "int4": {
+      "top10_chunk_overlap": 0.7947916666666668,
+      "top10_conversation_overlap": 0.8000000000000002,
+      "gold_hit_at_10": 0.5232558139534884,
+      "gold_hit_at_10_fp32": 0.5465116279069767,
+      "mean_cosine_to_fp32": 0.9675003886222839,
+      "min_cosine_to_fp32": 0.9585739374160767
+    }
+  },
+  "verifier": {}
+}

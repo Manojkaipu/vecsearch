@@ -1,0 +1,14 @@
+{
+  "model": "all-MiniLM-L6-v2",
+  "precision": "fp16",
+  "device": "GPU",
+  "load_s": 2.54,
+  "queries": 96,
+  "query_p50_ms": 2.842,
+  "query_p95_ms": 5.807,
+  "chunks_note": "512 corpus chunks, batch 32",
+  "chunks_per_s": 829.9,
+  "peak_rss_mb": 839.9,
+  "baseline_rss_mb": 298.7,
+  "gpu_mem_mb": 99.3
+}

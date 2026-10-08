@@ -1,0 +1,323 @@
+== started 2026-10-08T13:32:06-07:00
+ 13:32:06 up  1:23,  1 user,  load average: 0.71, 1.07, 1.50
+Mem:           10953        4836         958          23        5386        6117
+== GPU: embeddings (fp32 reference on CPU, then fp16/int8/int4 on GPU) and the LLM verifier
+== llm fp16 on GPU
+short {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 42.8, 'tpot_ms': 36.25, 'decode_tokens_per_s': 27.6, 'prefill_tokens_per_s': 1423.7}
+verifier {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 280.5, 'tpot_ms': 38.08, 'decode_tokens_per_s': 26.3, 'prefill_tokens_per_s': 6556.5}
+1/86 q043 supported=True (original True) 542 in / 30 out, 1.6 s
+2/86 q091 supported=False (original True) 1006 in / 71 out, 3.1 s
+3/86 q068 supported=False (original True) 4143 in / 105 out, 4.9 s
+4/86 q020 supported=False (original True) 4788 in / 74 out, 4.3 s
+5/86 q021 supported=False (original True) 1816 in / 128 out, 5.6 s
+6/86 q044 supported=True (original True) 1336 in / 21 out, 1.0 s
+7/86 q045 supported=False (original True) 1803 in / 116 out, 5.3 s
+8/86 q022 supported=True (original True) 1708 in / 42 out, 2.1 s
+9/86 q046 supported=False (original True) 3439 in / 110 out, 5.7 s
+10/86 q023 supported=False (original True) 1718 in / 146 out, 6.4 s
+11/86 q025 supported=True (original True) 601 in / 21 out, 0.9 s
+12/86 q047 supported=False (original True) 626 in / 237 out, 9.8 s
+13/86 q071 supported=False (original True) 4411 in / 80 out, 4.2 s
+14/86 q070 supported=True (original True) 5021 in / 30 out, 2.4 s
+15/86 q048 supported=False (original True) 2664 in / 61 out, 3.0 s
+16/86 q072 supported=False (original True) 2710 in / 132 out, 6.4 s
+17/86 q001 supported=True (original True) 916 in / 32 out, 1.7 s
+18/86 q027 supported=True (original True) 690 in / 63 out, 2.9 s
+19/86 q026 supported=False (original True) 2261 in / 93 out, 4.2 s
+20/86 q049 supported=True (original True) 1576 in / 21 out, 1.1 s
+21/86 q073 supported=True (original True) 1902 in / 30 out, 1.5 s
+22/86 q074 supported=False (original True) 1194 in / 134 out, 5.5 s
+23/86 q002 supported=False (original True) 4817 in / 89 out, 5.0 s
+24/86 q050 supported=False (original True) 1105 in / 103 out, 4.2 s
+25/86 q098 supported=False (original True) 451 in / 92 out, 3.7 s
+26/86 q075 supported=True (original True) 640 in / 21 out, 0.9 s
+27/86 q028 supported=True (original True) 1656 in / 42 out, 2.1 s
+28/86 q051 supported=False (original True) 922 in / 55 out, 2.3 s
+29/86 q003 supported=False (original True) 2287 in / 256 out, 10.9 s
+30/86 q005 supported=True (original True) 1131 in / 30 out, 1.6 s
+31/86 q029 supported=False (original True) 1071 in / 75 out, 3.3 s
+32/86 q052 supported=False (original True) 1440 in / 70 out, 3.1 s
+33/86 q076 supported=False (original True) 4237 in / 256 out, 11.5 s
+34/86 q030 supported=False (original True) 704 in / 84 out, 3.5 s
+35/86 q006 supported=False (original True) 1851 in / 62 out, 2.9 s
+36/86 q031 supported=True (original True) 463 in / 74 out, 3.0 s
+37/86 q077 supported=False (original True) 2590 in / 137 out, 6.4 s
+38/86 q053 supported=True (original True) 1675 in / 21 out, 1.2 s
+39/86 q054 supported=False (original True) 687 in / 235 out, 9.7 s
+40/86 q078 supported=False (original True) 2082 in / 63 out, 3.0 s
+41/86 q032 supported=False (original True) 2425 in / 183 out, 8.1 s
+42/86 q079 supported=False (original True) 980 in / 91 out, 3.8 s
+43/86 q008 supported=True (original True) 1229 in / 53 out, 2.4 s
+44/86 q055 supported=False (original True) 1834 in / 147 out, 6.4 s
+45/86 q007 supported=False (original True) 2318 in / 196 out, 8.7 s
+46/86 q033 supported=False (original False) 2522 in / 148 out, 6.6 s
+47/86 q080 supported=False (original True) 2259 in / 204 out, 8.9 s
+48/86 q056 supported=False (original True) 1807 in / 99 out, 4.4 s
+49/86 q081 supported=False (original True) 649 in / 92 out, 3.8 s
+50/86 q009 supported=False (original False) 1996 in / 137 out, 6.0 s
+51/86 q019 supported=True (original True) 4918 in / 42 out, 3.0 s
+52/86 q010 supported=True (original True) 4648 in / 42 out, 2.9 s
+53/86 q035 supported=False (original True) 2617 in / 99 out, 4.6 s
+54/86 q057 supported=False (original True) 4381 in / 109 out, 5.5 s
+55/86 q058 supported=False (original True) 569 in / 77 out, 3.1 s
+56/86 q034 supported=False (original False) 4128 in / 91 out, 4.6 s
+57/86 q011 supported=True (original True) 1637 in / 32 out, 1.7 s
+58/86 q036 supported=False (original True) 1650 in / 151 out, 6.7 s
+59/86 q059 supported=True (original True) 1558 in / 46 out, 2.2 s
+60/86 q037 supported=False (original True) 484 in / 100 out, 4.0 s
+61/86 q012 supported=False (original True) 2479 in / 256 out, 11.3 s
+62/86 q084 supported=True (original True) 1506 in / 42 out, 2.2 s
+63/86 q013 supported=True (original True) 384 in / 30 out, 1.4 s
+64/86 q085 supported=True (original True) 2043 in / 41 out, 2.0 s
+65/86 q083 supported=False (original False) 3170 in / 97 out, 4.7 s
+66/86 q038 supported=False (original False) 3016 in / 129 out, 6.0 s
+67/86 q014 supported=False (original True) 2646 in / 78 out, 3.6 s
+68/86 q060 supported=False (original False) 2443 in / 176 out, 7.7 s
+69/86 q039 supported=False (original True) 2225 in / 157 out, 6.8 s
+70/86 q086 supported=False (original True) 5102 in / 256 out, 11.8 s
+71/86 q062 supported=False (original True) 3480 in / 140 out, 6.8 s
+72/86 q061 supported=False (original True) 2791 in / 256 out, 12.1 s
+73/86 q015 supported=False (original True) 1642 in / 193 out, 7.6 s
+74/86 q040 supported=False (original True) 2355 in / 89 out, 3.8 s
+75/86 q063 supported=False (original True) 928 in / 69 out, 3.6 s
+76/86 q041 supported=False (original True) 1343 in / 101 out, 4.9 s
+77/86 q016 supported=False (original True) 2311 in / 116 out, 5.4 s
+78/86 q088 supported=True (original False) 1074 in / 30 out, 1.4 s
+79/86 q089 supported=False (original True) 364 in / 87 out, 3.8 s
+80/86 q065 supported=True (original True) 969 in / 48 out, 2.0 s
+81/86 q087 supported=False (original True) 8835 in / 256 out, 13.2 s
+82/86 q090 supported=False (original True) 1557 in / 100 out, 4.2 s
+83/86 q017 supported=False (original True) 3192 in / 87 out, 4.3 s
+84/86 q042 supported=False (original True) 2726 in / 102 out, 4.7 s
+85/86 q018 supported=False (original True) 6185 in / 256 out, 11.8 s
+86/86 q067 supported=False (original True) 3111 in / 89 out, 4.2 s
+{'model': 'Qwen2.5-1.5B-Instruct', 'precision': 'fp16', 'device': 'GPU', 'load_s': 27.6, 'speed': {'short': {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 42.8, 'tpot_ms': 36.25, 'decode_tokens_per_s': 27.6, 'prefill_tokens_per_s': 1423.7}, 'verifier': {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 280.5, 'tpot_ms': 38.08, 'decode_tokens_per_s': 26.3, 'prefill_tokens_per_s': 6556.5}}, 'constrained_decoding': True, 'verifier_items': 86, 'verifier_wall_s': 410.9, 'peak_rss_mb': 1226.6, 'baseline_rss_mb': 563.8, 'gpu_mem_mb': 3200.7}
+== llm int8 on GPU
+short {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 47.2, 'tpot_ms': 21.26, 'decode_tokens_per_s': 47.0, 'prefill_tokens_per_s': 1293.3}
+verifier {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 247.9, 'tpot_ms': 22.56, 'decode_tokens_per_s': 44.3, 'prefill_tokens_per_s': 7419.8}
+1/86 q043 supported=True (original True) 542 in / 30 out, 0.8 s
+2/86 q091 supported=False (original True) 1006 in / 71 out, 1.7 s
+3/86 q068 supported=True (original True) 4143 in / 61 out, 2.5 s
+4/86 q020 supported=False (original True) 4788 in / 93 out, 3.4 s
+5/86 q021 supported=False (original True) 1816 in / 128 out, 3.0 s
+6/86 q044 supported=True (original True) 1336 in / 21 out, 0.6 s
+7/86 q045 supported=False (original True) 1803 in / 224 out, 5.2 s
+8/86 q022 supported=True (original True) 1708 in / 42 out, 1.2 s
+9/86 q046 supported=False (original True) 3439 in / 93 out, 2.7 s
+10/86 q023 supported=False (original True) 1718 in / 133 out, 3.2 s
+11/86 q025 supported=True (original True) 601 in / 21 out, 0.8 s
+12/86 q047 supported=True (original True) 626 in / 30 out, 0.8 s
+13/86 q071 supported=False (original True) 4411 in / 80 out, 2.8 s
+14/86 q070 supported=True (original True) 5021 in / 53 out, 2.3 s
+15/86 q048 supported=False (original True) 2664 in / 61 out, 1.8 s
+16/86 q072 supported=False (original True) 2710 in / 92 out, 2.5 s
+17/86 q001 supported=True (original True) 916 in / 32 out, 0.8 s
+18/86 q027 supported=True (original True) 690 in / 78 out, 1.8 s
+19/86 q026 supported=False (original True) 2261 in / 100 out, 2.6 s
+20/86 q049 supported=True (original True) 1576 in / 21 out, 0.7 s
+21/86 q073 supported=True (original True) 1902 in / 42 out, 1.2 s
+22/86 q074 supported=True (original True) 1194 in / 32 out, 0.9 s
+23/86 q002 supported=False (original True) 4817 in / 100 out, 3.6 s
+24/86 q050 supported=False (original True) 1105 in / 103 out, 2.4 s
+25/86 q098 supported=False (original True) 451 in / 91 out, 2.0 s
+26/86 q075 supported=True (original True) 640 in / 21 out, 0.6 s
+27/86 q028 supported=True (original True) 1656 in / 42 out, 1.2 s
+28/86 q051 supported=True (original True) 922 in / 46 out, 1.2 s
+29/86 q003 supported=True (original True) 2287 in / 30 out, 1.0 s
+30/86 q005 supported=True (original True) 1131 in / 30 out, 0.8 s
+31/86 q029 supported=False (original True) 1071 in / 75 out, 1.8 s
+32/86 q052 supported=False (original True) 1440 in / 70 out, 1.8 s
+33/86 q076 supported=False (original True) 4237 in / 256 out, 8.0 s
+34/86 q030 supported=False (original True) 704 in / 82 out, 1.9 s
+35/86 q006 supported=False (original True) 1851 in / 73 out, 2.0 s
+36/86 q031 supported=True (original True) 463 in / 74 out, 1.7 s
+37/86 q077 supported=False (original True) 2590 in / 96 out, 2.6 s
+38/86 q053 supported=True (original True) 1675 in / 21 out, 0.7 s
+39/86 q054 supported=False (original True) 687 in / 246 out, 5.6 s
+40/86 q078 supported=False (original True) 2082 in / 134 out, 3.5 s
+41/86 q032 supported=False (original True) 2425 in / 256 out, 6.4 s
+42/86 q079 supported=True (original True) 980 in / 60 out, 1.5 s
+43/86 q008 supported=True (original True) 1229 in / 53 out, 1.4 s
+44/86 q055 supported=False (original True) 1834 in / 146 out, 3.6 s
+45/86 q007 supported=False (original True) 2318 in / 256 out, 6.3 s
+46/86 q033 supported=True (original False) 2522 in / 52 out, 1.7 s
+47/86 q080 supported=False (original True) 2259 in / 256 out, 6.4 s
+48/86 q056 supported=False (original True) 1807 in / 256 out, 6.3 s
+49/86 q081 supported=False (original True) 649 in / 92 out, 2.2 s
+50/86 q009 supported=False (original False) 1996 in / 108 out, 2.8 s
+51/86 q019 supported=True (original True) 4918 in / 42 out, 2.2 s
+52/86 q010 supported=True (original True) 4648 in / 42 out, 2.1 s
+53/86 q035 supported=False (original True) 2617 in / 80 out, 2.4 s
+54/86 q057 supported=False (original True) 4381 in / 167 out, 5.7 s
+55/86 q058 supported=True (original True) 569 in / 61 out, 1.5 s
+56/86 q034 supported=False (original False) 4128 in / 69 out, 2.7 s
+57/86 q011 supported=True (original True) 1637 in / 32 out, 1.1 s
+58/86 q036 supported=True (original True) 1650 in / 58 out, 1.7 s
+59/86 q059 supported=True (original True) 1558 in / 44 out, 1.2 s
+60/86 q037 supported=True (original True) 484 in / 21 out, 0.6 s
+61/86 q012 supported=False (original True) 2479 in / 256 out, 6.8 s
+62/86 q084 supported=True (original True) 1506 in / 42 out, 1.3 s
+63/86 q013 supported=True (original True) 384 in / 30 out, 0.8 s
+64/86 q085 supported=True (original True) 2043 in / 42 out, 1.3 s
+65/86 q083 supported=False (original False) 3170 in / 256 out, 6.7 s
+66/86 q038 supported=False (original False) 3016 in / 103 out, 3.3 s
+67/86 q014 supported=False (original True) 2646 in / 78 out, 2.4 s
+68/86 q060 supported=False (original False) 2443 in / 108 out, 3.1 s
+69/86 q039 supported=False (original True) 2225 in / 157 out, 4.1 s
+70/86 q086 supported=False (original True) 5102 in / 192 out, 6.5 s
+71/86 q062 supported=False (original True) 3480 in / 142 out, 4.0 s
+72/86 q061 supported=False (original True) 2791 in / 256 out, 6.6 s
+73/86 q015 supported=False (original True) 1642 in / 256 out, 6.5 s
+74/86 q040 supported=False (original True) 2355 in / 81 out, 2.3 s
+75/86 q063 supported=False (original True) 928 in / 89 out, 2.1 s
+76/86 q041 supported=False (original True) 1343 in / 102 out, 2.5 s
+77/86 q016 supported=False (original True) 2311 in / 100 out, 2.7 s
+78/86 q088 supported=True (original False) 1074 in / 61 out, 1.6 s
+79/86 q089 supported=True (original True) 364 in / 54 out, 1.3 s
+80/86 q065 supported=True (original True) 969 in / 49 out, 1.2 s
+81/86 q087 supported=False (original True) 8835 in / 256 out, 11.0 s
+82/86 q090 supported=False (original True) 1557 in / 101 out, 2.6 s
+83/86 q017 supported=False (original True) 3192 in / 87 out, 2.6 s
+84/86 q042 supported=False (original True) 2726 in / 67 out, 2.0 s
+85/86 q018 supported=True (original True) 6185 in / 95 out, 4.3 s
+86/86 q067 supported=False (original True) 3111 in / 89 out, 2.7 s
+{'model': 'Qwen2.5-1.5B-Instruct', 'precision': 'int8', 'device': 'GPU', 'load_s': 23.25, 'speed': {'short': {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 47.2, 'tpot_ms': 21.26, 'decode_tokens_per_s': 47.0, 'prefill_tokens_per_s': 1293.3}, 'verifier': {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 247.9, 'tpot_ms': 22.56, 'decode_tokens_per_s': 44.3, 'prefill_tokens_per_s': 7419.8}}, 'constrained_decoding': True, 'verifier_items': 86, 'verifier_wall_s': 237.7, 'peak_rss_mb': 1175.4, 'baseline_rss_mb': 563.8, 'gpu_mem_mb': 1626.1}
+== llm int4 on GPU
+short {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 36.6, 'tpot_ms': 15.1, 'decode_tokens_per_s': 66.2, 'prefill_tokens_per_s': 1664.7}
+verifier {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 273.8, 'tpot_ms': 16.77, 'decode_tokens_per_s': 59.6, 'prefill_tokens_per_s': 6715.9}
+1/86 q043 supported=False (original True) 542 in / 132 out, 2.4 s
+2/86 q091 supported=False (original True) 1006 in / 121 out, 2.2 s
+3/86 q068 supported=True (original True) 4143 in / 33 out, 1.5 s
+4/86 q020 supported=False (original True) 4788 in / 256 out, 5.6 s
+5/86 q021 supported=True (original True) 1816 in / 32 out, 0.9 s
+6/86 q044 supported=True (original True) 1336 in / 21 out, 0.6 s
+7/86 q045 supported=False (original True) 1803 in / 141 out, 2.8 s
+8/86 q022 supported=True (original True) 1708 in / 21 out, 0.6 s
+9/86 q046 supported=False (original True) 3439 in / 109 out, 2.6 s
+10/86 q023 supported=False (original True) 1718 in / 256 out, 4.6 s
+11/86 q025 supported=True (original True) 601 in / 21 out, 0.8 s
+12/86 q047 supported=True (original True) 626 in / 37 out, 0.7 s
+13/86 q071 supported=True (original True) 4411 in / 256 out, 5.6 s
+14/86 q070 supported=True (original True) 5021 in / 36 out, 1.8 s
+15/86 q048 supported=True (original True) 2664 in / 32 out, 1.0 s
+16/86 q072 supported=True (original True) 2710 in / 32 out, 1.0 s
+17/86 q001 supported=True (original True) 916 in / 32 out, 0.7 s
+18/86 q027 supported=False (original True) 690 in / 81 out, 1.5 s
+19/86 q026 supported=False (original True) 2261 in / 69 out, 1.6 s
+20/86 q049 supported=True (original True) 1576 in / 32 out, 0.8 s
+21/86 q073 supported=True (original True) 1902 in / 35 out, 0.9 s
+22/86 q074 supported=True (original True) 1194 in / 32 out, 0.7 s
+23/86 q002 supported=False (original True) 4817 in / 118 out, 3.0 s
+24/86 q050 supported=False (original True) 1105 in / 256 out, 7.0 s
+25/86 q098 supported=False (original True) 451 in / 63 out, 1.4 s
+26/86 q075 supported=True (original True) 640 in / 21 out, 0.5 s
+27/86 q028 supported=True (original True) 1656 in / 21 out, 0.7 s
+28/86 q051 supported=True (original True) 922 in / 32 out, 0.8 s
+29/86 q003 supported=True (original True) 2287 in / 32 out, 1.1 s
+30/86 q005 supported=True (original True) 1131 in / 21 out, 0.7 s
+31/86 q029 supported=True (original True) 1071 in / 32 out, 0.8 s
+32/86 q052 supported=False (original True) 1440 in / 76 out, 1.6 s
+33/86 q076 supported=False (original True) 4237 in / 256 out, 5.5 s
+34/86 q030 supported=False (original True) 704 in / 77 out, 1.4 s
+35/86 q006 supported=False (original True) 1851 in / 256 out, 4.8 s
+36/86 q031 supported=False (original True) 463 in / 86 out, 1.5 s
+37/86 q077 supported=True (original True) 2590 in / 32 out, 1.0 s
+38/86 q053 supported=True (original True) 1675 in / 32 out, 0.9 s
+39/86 q054 supported=False (original True) 687 in / 195 out, 3.4 s
+40/86 q078 supported=False (original True) 2082 in / 189 out, 3.7 s
+41/86 q032 supported=False (original True) 2425 in / 201 out, 4.0 s
+42/86 q079 supported=False (original True) 980 in / 109 out, 2.1 s
+43/86 q008 supported=True (original True) 1229 in / 32 out, 0.8 s
+44/86 q055 supported=True (original True) 1834 in / 35 out, 0.9 s
+45/86 q007 supported=False (original True) 2318 in / 256 out, 5.0 s
+46/86 q033 supported=True (original False) 2522 in / 32 out, 1.0 s
+47/86 q080 supported=True (original True) 2259 in / 32 out, 1.0 s
+48/86 q056 supported=False (original True) 1807 in / 256 out, 4.8 s
+49/86 q081 supported=False (original True) 649 in / 103 out, 1.8 s
+50/86 q009 supported=False (original False) 1996 in / 256 out, 4.8 s
+51/86 q019 supported=True (original True) 4918 in / 32 out, 1.6 s
+52/86 q010 supported=True (original True) 4648 in / 32 out, 1.4 s
+53/86 q035 supported=False (original True) 2617 in / 86 out, 1.9 s
+54/86 q057 supported=True (original True) 4381 in / 32 out, 1.4 s
+55/86 q058 supported=False (original True) 569 in / 88 out, 1.5 s
+56/86 q034 supported=True (original False) 4128 in / 33 out, 1.3 s
+57/86 q011 supported=True (original True) 1637 in / 32 out, 0.8 s
+58/86 q036 supported=True (original True) 1650 in / 32 out, 0.8 s
+59/86 q059 supported=True (original True) 1558 in / 32 out, 0.8 s
+60/86 q037 supported=False (original True) 484 in / 70 out, 1.2 s
+61/86 q012 supported=True (original True) 2479 in / 35 out, 1.0 s
+62/86 q084 supported=True (original True) 1506 in / 32 out, 0.8 s
+63/86 q013 supported=True (original True) 384 in / 32 out, 0.8 s
+64/86 q085 supported=True (original True) 2043 in / 36 out, 0.9 s
+65/86 q083 supported=True (original False) 3170 in / 32 out, 1.1 s
+66/86 q038 supported=True (original False) 3016 in / 33 out, 1.1 s
+67/86 q014 supported=True (original True) 2646 in / 31 out, 1.0 s
+68/86 q060 supported=False (original False) 2443 in / 256 out, 4.8 s
+69/86 q039 supported=True (original True) 2225 in / 32 out, 0.9 s
+70/86 q086 supported=True (original True) 5102 in / 32 out, 1.7 s
+71/86 q062 supported=True (original True) 3480 in / 134 out, 3.1 s
+72/86 q061 supported=False (original True) 2791 in / 256 out, 5.0 s
+73/86 q015 supported=False (original True) 1642 in / 256 out, 4.6 s
+74/86 q040 supported=True (original True) 2355 in / 32 out, 1.0 s
+75/86 q063 supported=False (original True) 928 in / 81 out, 1.5 s
+76/86 q041 supported=True (original True) 1343 in / 32 out, 0.7 s
+77/86 q016 supported=False (original True) 2311 in / 256 out, 4.9 s
+78/86 q088 supported=True (original False) 1074 in / 35 out, 0.8 s
+79/86 q089 supported=False (original True) 364 in / 63 out, 1.3 s
+80/86 q065 supported=True (original True) 969 in / 32 out, 0.8 s
+81/86 q087 supported=False (original True) 8835 in / 56 out, 3.3 s
+82/86 q090 supported=False (original True) 1557 in / 58 out, 1.2 s
+83/86 q017 supported=False (original True) 3192 in / 256 out, 5.2 s
+84/86 q042 supported=True (original True) 2726 in / 32 out, 1.0 s
+85/86 q018 supported=True (original True) 6185 in / 256 out, 5.9 s
+86/86 q067 supported=True (original True) 3111 in / 33 out, 1.1 s
+{'model': 'Qwen2.5-1.5B-Instruct', 'precision': 'int4', 'device': 'GPU', 'load_s': 15.75, 'speed': {'short': {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 36.6, 'tpot_ms': 15.1, 'decode_tokens_per_s': 66.2, 'prefill_tokens_per_s': 1664.7}, 'verifier': {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 273.8, 'tpot_ms': 16.77, 'decode_tokens_per_s': 59.6, 'prefill_tokens_per_s': 6715.9}}, 'constrained_decoding': True, 'verifier_items': 86, 'verifier_wall_s': 175.1, 'peak_rss_mb': 1082.9, 'baseline_rss_mb': 563.7, 'gpu_mem_mb': 1026.2}
+### Embeddings: all-MiniLM-L6-v2 on GPU
+
+| precision | top-10 overlap with FP32 (chunks) | (conversations) | source in top 10 | mean cosine to FP32 | query p50 (ms) | chunks/s | peak RSS (MB) | GPU alloc (MB) | model (MB) |
+|---|---|---|---|---|---|---|---|---|---|
+| FP32 (PyTorch, CPU; reference) | 1.000 | 1.000 | 0.547 | 1.00000 | 7.94 | 45 | 818 | — | — |
+| FP16 | 1.000 | 1.000 | 0.547 | 1.00000 | 2.84 | 830 | 840 | 99 | 43 |
+| INT8 | 0.975 | 0.973 | 0.547 | 0.99919 | 3.53 | 792 | 1,080 | 98 | 22 |
+| INT4 | 0.792 | 0.796 | 0.512 | 0.96640 | 3.47 | 677 | 1,027 | 93 | 17 |
+
+### LLM verifier: Qwen2.5-1.5B-Instruct on GPU
+
+| precision | agrees with original verifier | kappa | flagged answers caught | false alarms | agrees with FP16 | TTFT, verifier prompt (ms) | decode (tok/s) | prefill (tok/s) | peak RSS (MB) | GPU alloc (MB) | model (MB) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| FP16 | 29/86 (34%) | 0.03 | 6/7 | 56 | 100% | 280 | 27.6 | 6,556 | 1,227 | 3,201 | 2,946 |
+| INT8 | 39/86 (45%) | 0.04 | 5/7 | 45 | 86% | 248 | 47.0 | 7,420 | 1,175 | 1,626 | 1,477 |
+| INT4 | 47/86 (55%) | -0.05 | 2/7 | 34 | 63% | 274 | 66.2 | 6,716 | 1,083 | 1,026 | 935 |
+
+== CPU: embeddings at fp16/int8/int4
+{'model': 'all-MiniLM-L6-v2', 'precision': 'fp16', 'device': 'CPU', 'load_s': 3.95, 'queries': 96, 'query_p50_ms': 4.85, 'query_p95_ms': 7.663, 'chunks_note': '512 corpus chunks, batch 32', 'chunks_per_s': 56.2, 'peak_rss_mb': 981.3, 'baseline_rss_mb': 298.0, 'gpu_mem_mb': None}
+{'model': 'all-MiniLM-L6-v2', 'precision': 'int8', 'device': 'CPU', 'load_s': 3.84, 'queries': 96, 'query_p50_ms': 4.964, 'query_p95_ms': 8.362, 'chunks_note': '512 corpus chunks, batch 32', 'chunks_per_s': 87.3, 'peak_rss_mb': 1018.8, 'baseline_rss_mb': 298.6, 'gpu_mem_mb': None}
+{'model': 'all-MiniLM-L6-v2', 'precision': 'int4', 'device': 'CPU', 'load_s': 3.68, 'queries': 96, 'query_p50_ms': 4.595, 'query_p95_ms': 7.552, 'chunks_note': '512 corpus chunks, batch 32', 'chunks_per_s': 73.5, 'peak_rss_mb': 993.0, 'baseline_rss_mb': 298.7, 'gpu_mem_mb': None}
+== CPU: LLM speed only
+short {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 631.4, 'tpot_ms': 80.67, 'decode_tokens_per_s': 12.4, 'prefill_tokens_per_s': 96.6}
+verifier {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 14096.9, 'tpot_ms': 73.48, 'decode_tokens_per_s': 13.6, 'prefill_tokens_per_s': 130.5}
+{'model': 'Qwen2.5-1.5B-Instruct', 'precision': 'fp16', 'device': 'CPU', 'load_s': 2.62, 'speed': {'short': {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 631.4, 'tpot_ms': 80.67, 'decode_tokens_per_s': 12.4, 'prefill_tokens_per_s': 96.6}, 'verifier': {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 14096.9, 'tpot_ms': 73.48, 'decode_tokens_per_s': 13.6, 'prefill_tokens_per_s': 130.5}}, 'constrained_decoding': True, 'verifier_items': 0, 'verifier_wall_s': 0.0, 'peak_rss_mb': 5493.1, 'baseline_rss_mb': 563.0, 'gpu_mem_mb': None}
+short {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 208.7, 'tpot_ms': 40.97, 'decode_tokens_per_s': 24.4, 'prefill_tokens_per_s': 292.3}
+verifier {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 5283.8, 'tpot_ms': 47.43, 'decode_tokens_per_s': 21.1, 'prefill_tokens_per_s': 348.0}
+{'model': 'Qwen2.5-1.5B-Instruct', 'precision': 'int8', 'device': 'CPU', 'load_s': 2.6, 'speed': {'short': {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 208.7, 'tpot_ms': 40.97, 'decode_tokens_per_s': 24.4, 'prefill_tokens_per_s': 292.3}, 'verifier': {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 5283.8, 'tpot_ms': 47.43, 'decode_tokens_per_s': 21.1, 'prefill_tokens_per_s': 348.0}}, 'constrained_decoding': True, 'verifier_items': 0, 'verifier_wall_s': 0.0, 'peak_rss_mb': 4087.4, 'baseline_rss_mb': 563.8, 'gpu_mem_mb': None}
+short {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 340.6, 'tpot_ms': 37.55, 'decode_tokens_per_s': 26.6, 'prefill_tokens_per_s': 179.1}
+verifier {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 7475.5, 'tpot_ms': 39.36, 'decode_tokens_per_s': 25.4, 'prefill_tokens_per_s': 246.0}
+{'model': 'Qwen2.5-1.5B-Instruct', 'precision': 'int4', 'device': 'CPU', 'load_s': 2.31, 'speed': {'short': {'input_tokens': 61, 'new_tokens': 128, 'ttft_ms': 340.6, 'tpot_ms': 37.55, 'decode_tokens_per_s': 26.6, 'prefill_tokens_per_s': 179.1}, 'verifier': {'input_tokens': 1839, 'new_tokens': 128, 'ttft_ms': 7475.5, 'tpot_ms': 39.36, 'decode_tokens_per_s': 25.4, 'prefill_tokens_per_s': 246.0}}, 'constrained_decoding': True, 'verifier_items': 0, 'verifier_wall_s': 0.0, 'peak_rss_mb': 3048.3, 'baseline_rss_mb': 563.7, 'gpu_mem_mb': None}
+### Embeddings: all-MiniLM-L6-v2 on CPU
+
+| precision | top-10 overlap with FP32 (chunks) | (conversations) | source in top 10 | mean cosine to FP32 | query p50 (ms) | chunks/s | peak RSS (MB) | GPU alloc (MB) | model (MB) |
+|---|---|---|---|---|---|---|---|---|---|
+| FP32 (PyTorch, CPU; reference) | 1.000 | 1.000 | 0.547 | 1.00000 | 7.94 | 45 | 818 | — | — |
+| FP16 | 0.999 | 0.999 | 0.547 | 1.00000 | 4.85 | 56 | 981 | — | 43 |
+| INT8 | 0.983 | 0.982 | 0.547 | 0.99959 | 4.96 | 87 | 1,019 | — | 22 |
+| INT4 | 0.795 | 0.800 | 0.523 | 0.96750 | 4.59 | 74 | 993 | — | 17 |
+
+### LLM verifier: Qwen2.5-1.5B-Instruct on CPU
+
+| precision | agrees with original verifier | kappa | flagged answers caught | false alarms | agrees with FP16 | TTFT, verifier prompt (ms) | decode (tok/s) | prefill (tok/s) | peak RSS (MB) | GPU alloc (MB) | model (MB) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| FP16 | — | — | — | — | — | 14,097 | 12.4 | 130 | 5,493 | — | 2,946 |
+| INT8 | — | — | — | — | — | 5,284 | 24.4 | 348 | 4,087 | — | 1,477 |
+| INT4 | — | — | — | — | — | 7,476 | 26.6 | 246 | 3,048 | — | 935 |
+
+== finished 2026-10-08T14:07:43-07:00
