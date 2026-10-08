@@ -4,7 +4,8 @@
 
 One process per configuration, so the peak-memory reading belongs to that model alone.
   * speed: greedy decoding of 128 tokens after (a) a short prompt and (b) the median-length verifier
-    prompt from the bundle; time to first token and decode tokens/second, median of 3 runs
+    prompt from the bundle; time to first token and decode tokens/second, median of 3 runs, each with a
+    unique prompt so the KV cache of an earlier run can't be reused
   * quality: every stored answer in the bundle is checked the way support-rag's Agent.verify does,
     with its prompt and verdict schema (the schema is enforced during decoding), temperature 0
 and writes <out>/llm_<precision>_<device>.json with the speed numbers and every verdict.
@@ -64,7 +65,7 @@ def main():
         return c
 
     def timed(prompt, cfg):
-        res = pipe.generate(prompt, cfg)
+        res = pipe.generate([prompt], cfg)  # a list, so the result carries perf_metrics
         m = res.perf_metrics
         return dict(text=res.texts[0], input_tokens=m.get_num_input_tokens(),
                     new_tokens=m.get_num_generated_tokens(), ttft_ms=m.get_ttft().mean,
@@ -72,17 +73,20 @@ def main():
                     total_ms=m.get_generate_duration().mean)
 
     # ---- speed ----
+    # Every timed call gets a different prompt (a run id as the first words of the system message).
+    # The pipeline reuses the KV cache of a repeated prefix, so timing one prompt several times would
+    # measure cache hits: an earlier version of this script reported 1,834 tokens prefilled in 44 ms.
     lengths = sorted((len(tok(it["prompt"]).input_ids), i) for i, it in enumerate(all_items))
     median_item = all_items[lengths[len(lengths) // 2][1]]
     workloads = {
-        "short": render("You are a helpful assistant.", SHORT_PROMPT),
-        "verifier": render(v["system"] + FORMAT_NOTE, median_item["prompt"]),
+        "short": lambda run: render(f"Run {run}. You are a helpful assistant.", SHORT_PROMPT),
+        "verifier": lambda run: render(f"Run {run}. " + v["system"] + FORMAT_NOTE, median_item["prompt"]),
     }
     speed = {}
     cfg = config(128, 128)  # exactly 128 new tokens, so runs are comparable
-    for name, prompt in workloads.items():
-        timed(prompt, cfg)  # warm-up (kernel compilation, caches)
-        runs = [timed(prompt, cfg) for _ in range(args.passes)]
+    for name, make in workloads.items():
+        timed(make("warm-up"), cfg)  # warm-up (kernel compilation, caches)
+        runs = [timed(make(f"{name}-{i}"), cfg) for i in range(args.passes)]
         speed[name] = dict(input_tokens=runs[0]["input_tokens"], new_tokens=runs[0]["new_tokens"],
                            ttft_ms=round(statistics.median(r["ttft_ms"] for r in runs), 1),
                            tpot_ms=round(statistics.median(r["tpot_ms"] for r in runs), 2),
