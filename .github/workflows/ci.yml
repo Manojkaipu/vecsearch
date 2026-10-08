@@ -1,7 +1,8 @@
 name: CI
 on:
-  push: { branches: [main] }
+  push: { branches: [main, opencl] }
   pull_request:
+  workflow_dispatch:
 
 jobs:
   cpp:

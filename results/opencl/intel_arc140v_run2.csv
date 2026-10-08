@@ -1,0 +1,14 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,1,16.973,58.9,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,8,18.43,434.1,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,32,42.582,751.5,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,128,64.298,1990.7,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,512,270.425,1893.3,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,1024,567.113,1805.6,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,4096,2734.532,1497.9,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1,19.264,51.9,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,8,33.074,241.9,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,32,80.055,399.7,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,128,267.781,478.0,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,512,1064.992,480.8,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1024,2160.75,473.9,1.0

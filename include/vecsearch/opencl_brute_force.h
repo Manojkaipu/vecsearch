@@ -11,6 +11,7 @@
 #pragma once
 #include <cstddef>
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -57,6 +58,10 @@ class OpenCLBruteForceIndex {
   Metric metric() const;
   const OpenCLDeviceInfo& device_info() const;
   bool uses_subgroups() const;
+
+  // With VECSEARCH_OPENCL_PROFILE=1 in the environment: milliseconds spent in each kernel (norms,
+  // naive, skinny, tiled, select) since the last call, measured with OpenCL events. Empty otherwise.
+  std::map<std::string, double> take_profile();
 
  private:
   struct Impl;

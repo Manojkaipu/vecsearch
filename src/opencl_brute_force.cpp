@@ -229,11 +229,14 @@ struct OpenCLBruteForceIndex::Impl {
   std::vector<std::unique_ptr<std::remove_pointer_t<cl_program>, void (*)(cl_program)>> programs;
   std::map<std::string, cl_kernel> kernels;
   std::vector<Page> pages;
+  bool profiling = false;  // VECSEARCH_OPENCL_PROFILE=1: time each kernel with OpenCL events
+  std::vector<std::pair<std::string, cl_event>> events;
   DeviceArray<float> q, qn, dist, cand_d[2];
   DeviceArray<uint32_t> cand_i[2];
   std::mutex mu;
 
   ~Impl() {
+    for (auto& e : events) clReleaseEvent(e.second);
     for (auto& kv : kernels) clReleaseKernel(kv.second);
     // programs, buffers and the queue are released by their own destructors, in that order
   }
@@ -266,18 +269,36 @@ struct OpenCLBruteForceIndex::Impl {
   }
 
   template <class... Args>
-  void launch(cl_kernel k, size_t dims, const size_t* global, const size_t* local, Args... args) {
+  void launch(const char* name, cl_kernel k, size_t dims, const size_t* global, const size_t* local, Args... args) {
     cl_uint i = 0;
     int unused[] = {0, (set_arg(k, i++, args), 0)...};
     (void)unused;
-    CL_CHECK(clEnqueueNDRangeKernel(qu.q, k, cl_uint(dims), nullptr, global, local, 0, nullptr, nullptr));
+    cl_event ev = nullptr;
+    CL_CHECK(clEnqueueNDRangeKernel(qu.q, k, cl_uint(dims), nullptr, global, local, 0, nullptr,
+                                    profiling ? &ev : nullptr));
+    if (ev) events.emplace_back(name, ev);
+  }
+
+  // Milliseconds spent in each kernel since the last call (needs profiling), summed by name.
+  std::map<std::string, double> take_profile() {
+    std::map<std::string, double> ms;
+    CL_CHECK(clFinish(qu.q));
+    for (auto& e : events) {
+      cl_ulong t0 = 0, t1 = 0;
+      clGetEventProfilingInfo(e.second, CL_PROFILING_COMMAND_START, sizeof(t0), &t0, nullptr);
+      clGetEventProfilingInfo(e.second, CL_PROFILING_COMMAND_END, sizeof(t1), &t1, nullptr);
+      ms[e.first] += double(t1 - t0) * 1e-6;
+      clReleaseEvent(e.second);
+    }
+    events.clear();
+    return ms;
   }
 
   // Squared norm of `rows` rows of buf starting at row0, into out[out0 ...).
   void norms(cl_mem buf, size_t row0, size_t rows, cl_mem out, size_t out0) {
     const size_t groups = std::min(ceil_div(rows, 8), sms * kSkinnyGroupsPerCu);
     const size_t global = groups * kGroup, local = kGroup;
-    launch(kernel("norms_kernel", "-DVS_NORMS"), 1, &global, &local, buf, UL(row0), U(rows), U(dp), out, UL(out0));
+    launch("norms", kernel("norms_kernel", "-DVS_NORMS"), 1, &global, &local, buf, UL(row0), U(rows), U(dp), out, UL(out0));
   }
 
   // Segment length for a select pass: enough segments to fill the GPU, but each long enough
@@ -292,7 +313,7 @@ struct OpenCLBruteForceIndex::Impl {
               size_t out_col) {
     const size_t threads = kSelectSlots / K;
     const size_t global[2] = {nseg * threads, rows}, local[2] = {threads, 1};
-    launch(kernel("select_kernel", "-DVS_K=" + std::to_string(K)), 2, global, local, d, ids,
+    launch("select", kernel("select_kernel", "-DVS_K=" + std::to_string(K)), 2, global, local, d, ids,
            cl_int(use_ids), UL(ld_in), U(id_base), U(len), U(seg), out_d, out_i, UL(ld_out), U(out_col));
   }
 
@@ -302,7 +323,7 @@ struct OpenCLBruteForceIndex::Impl {
     switch (m) {
       case GpuMethod::Naive: {
         const size_t global[2] = {ceil_div(len, kGroup) * kGroup, qt}, local[2] = {kGroup, 1};
-        launch(kernel("naive_kernel", "-DVS_NAIVE"), 2, global, local, q.get(), p.x.get(), UL(c0), U(qt),
+        launch("naive", kernel("naive_kernel", "-DVS_NAIVE"), 2, global, local, q.get(), p.x.get(), UL(c0), U(qt),
                U(len), U(dp), l2, dist.get(), UL(ld));
         break;
       }
@@ -311,14 +332,14 @@ struct OpenCLBruteForceIndex::Impl {
         const size_t global = groups * kGroup, local = kGroup;
         for (size_t b0 = 0; b0 < qt; b0 += kSkinnyQueries) {
           const size_t nb = std::min<size_t>(kSkinnyQueries, qt - b0);
-          launch(kernel("skinny_kernel", "-DVS_QB=" + std::to_string(nb)), 1, &global, &local, q.get(),
+          launch("skinny", kernel("skinny_kernel", "-DVS_QB=" + std::to_string(nb)), 1, &global, &local, q.get(),
                  UL(b0 * dp / 4), p.x.get(), UL(c0), U(len), U(dp), l2, dist.get(), UL(b0 * ld), UL(ld));
         }
         break;
       }
       default: {
         const size_t global[2] = {ceil_div(len, kTile) * kGroup, ceil_div(qt, kTile)}, local[2] = {kGroup, 1};
-        launch(kernel("tiled_kernel", "-DVS_TILED"), 2, global, local, q.get(), p.x.get(), UL(c0), U(qt),
+        launch("tiled", kernel("tiled_kernel", "-DVS_TILED"), 2, global, local, q.get(), p.x.get(), UL(c0), U(qt),
                U(len), U(dp), l2, qn.get(), p.xn.get(), dist.get(), UL(ld));
         break;
       }
@@ -370,7 +391,9 @@ OpenCLBruteForceIndex::OpenCLBruteForceIndex(size_t dim, Metric metric, int devi
   const cl_context_properties props[] = {CL_CONTEXT_PLATFORM, cl_context_properties(found[device].platform), 0};
   s.qu.ctx = clCreateContext(props, 1, &s.dev, nullptr, nullptr, &err);
   if (!s.qu.ctx) throw std::runtime_error(std::string("clCreateContext: ") + cl_error_name(err));
-  s.qu.q = clCreateCommandQueue(s.qu.ctx, s.dev, 0, &err);
+  const char* prof = std::getenv("VECSEARCH_OPENCL_PROFILE");
+  s.profiling = prof && prof[0] == '1';
+  s.qu.q = clCreateCommandQueue(s.qu.ctx, s.dev, s.profiling ? CL_QUEUE_PROFILING_ENABLE : 0, &err);
   if (!s.qu.q) throw std::runtime_error(std::string("clCreateCommandQueue: ") + cl_error_name(err));
 
   // Sub-groups: use them if asked or available, and if the compiler accepts them.
@@ -403,6 +426,11 @@ size_t OpenCLBruteForceIndex::dim() const { return impl_->dim; }
 Metric OpenCLBruteForceIndex::metric() const { return impl_->metric; }
 const OpenCLDeviceInfo& OpenCLBruteForceIndex::device_info() const { return impl_->info; }
 bool OpenCLBruteForceIndex::uses_subgroups() const { return impl_->use_sg; }
+
+std::map<std::string, double> OpenCLBruteForceIndex::take_profile() {
+  std::lock_guard<std::mutex> g(impl_->mu);
+  return impl_->take_profile();
+}
 
 void OpenCLBruteForceIndex::add(const float* data, size_t m) {
   Impl& s = *impl_;

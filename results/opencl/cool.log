@@ -1,0 +1,38 @@
+== cooling down 180 s from 2026-10-08T13:03:11-07:00
+== per-kernel profile (cool)
+Intel(R) Graphics [0x64a0], sub-groups: True, method auto
+  batch     1: wall    17.30 ms | select 0.64, skinny 15.44 | other 1.22
+  batch     8: wall    18.91 ms | select 1.70, skinny 15.75 | other 1.46
+  batch    16: wall    35.50 ms | select 2.46, skinny 31.76 | other 1.29
+  batch    32: wall    44.35 ms | select 3.74, tiled 38.89 | other 1.72
+  batch   128: wall    66.53 ms | select 11.00, tiled 53.92 | other 1.60
+  batch   512: wall   281.62 ms | select 54.57, tiled 225.02 | other 2.03
+  batch  1024: wall   580.73 ms | select 134.82, tiled 444.00 | other 1.91
+  batch  4096: wall  2738.73 ms | select 983.88, tiled 1751.19 | other 3.66
+wrote results/opencl/intel_arc140v_profile.csv
+== kernel ablation (cool)
+data: 1,000,000 x 384 (ip), queries: 1,024
+opencl-naive on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:     172.20 ms             6 QPS
+  batch     4:     689.30 ms             6 QPS
+  batch     8:    1367.67 ms             6 QPS
+  batch    16:    2737.20 ms             6 QPS
+  batch    32:    5579.93 ms             6 QPS
+  batch   128:   22006.82 ms             6 QPS
+opencl-skinny on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      17.03 ms            59 QPS
+  batch     4:      17.82 ms           224 QPS
+  batch     8:      18.33 ms           437 QPS
+  batch    16:      34.30 ms           466 QPS
+  batch    32:      66.42 ms           482 QPS
+  batch   128:     261.07 ms           490 QPS
+opencl-tiled on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      37.11 ms            27 QPS
+  batch     4:      38.49 ms           104 QPS
+  batch     8:      39.19 ms           204 QPS
+  batch    16:      40.69 ms           393 QPS
+  batch    32:      43.74 ms           732 QPS
+  batch   128:      66.05 ms         1,938 QPS
+  batch  1024:     580.48 ms         1,764 QPS
+wrote results/opencl/intel_arc140v_methods.csv
+== finished 2026-10-08T13:08:25-07:00

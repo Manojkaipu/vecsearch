@@ -241,6 +241,8 @@ PYBIND11_MODULE(_vecsearch, m) {
       .def_property_readonly("dim", &OpenCLBruteForceIndex::dim)
       .def_property_readonly("uses_subgroups", &OpenCLBruteForceIndex::uses_subgroups)
       .def_property_readonly("device_name", [](const OpenCLBruteForceIndex& self) { return self.device_info().name; })
+      .def("take_profile", [](OpenCLBruteForceIndex& self) { return self.take_profile(); },
+           "Milliseconds in each kernel since the last call; needs VECSEARCH_OPENCL_PROFILE=1, else empty.")
       .def("__len__", &OpenCLBruteForceIndex::size);
 #endif
 

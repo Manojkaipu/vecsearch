@@ -1,0 +1,120 @@
+== started 2026-10-08T12:57:50-07:00
+ 12:57:50 up 48 min,  1 user,  load average: 0.29, 2.55, 3.63
+== main sweep, run 1 (opencl, opencl-nosg, cpu)
+data: 1,000,000 x 384 (ip), queries: 4,096
+opencl on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      18.08 ms            55 QPS
+  batch     8:      18.87 ms           424 QPS
+  batch    32:      42.68 ms           750 QPS
+  batch   128:      64.31 ms         1,990 QPS
+  batch   512:     274.79 ms         1,863 QPS
+  batch  1024:     570.12 ms         1,796 QPS
+  batch  4096:    2666.73 ms         1,536 QPS
+opencl-nosg on Intel(R) Graphics [0x64a0], local-memory reduction: recall vs cpu 1.0000
+  batch     1:      16.63 ms            60 QPS
+  batch     8:      23.81 ms           336 QPS
+  batch    32:      42.69 ms           750 QPS
+  batch   128:      63.06 ms         2,030 QPS
+  batch   512:     265.44 ms         1,929 QPS
+  batch  1024:     552.28 ms         1,854 QPS
+  batch  4096:    2611.69 ms         1,568 QPS
+cpu on Intel(R) Core(TM) Ultra 7 256V, 8 threads: recall vs cpu 1.0000
+  batch     1:      19.34 ms            52 QPS
+  batch     8:      33.94 ms           236 QPS
+  batch    32:      79.41 ms           403 QPS
+  batch   128:     283.55 ms           451 QPS
+  batch   512:    1186.10 ms           432 QPS
+  batch  1024:    2445.45 ms           419 QPS
+wrote results/opencl/intel_arc140v.csv
+== main sweep, run 2 (opencl, cpu)
+data: 1,000,000 x 384 (ip), queries: 4,096
+opencl on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      16.97 ms            59 QPS
+  batch     8:      18.43 ms           434 QPS
+  batch    32:      42.58 ms           751 QPS
+  batch   128:      64.30 ms         1,991 QPS
+  batch   512:     270.42 ms         1,893 QPS
+  batch  1024:     567.11 ms         1,806 QPS
+  batch  4096:    2734.53 ms         1,498 QPS
+cpu on Intel(R) Core(TM) Ultra 7 256V, 8 threads: recall vs cpu 1.0000
+  batch     1:      19.26 ms            52 QPS
+  batch     8:      33.07 ms           242 QPS
+  batch    32:      80.05 ms           400 QPS
+  batch   128:     267.78 ms           478 QPS
+  batch   512:    1064.99 ms           481 QPS
+  batch  1024:    2160.75 ms           474 QPS
+wrote results/opencl/intel_arc140v_run2.csv
+== main sweep, run 3 (opencl, cpu)
+data: 1,000,000 x 384 (ip), queries: 4,096
+opencl on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      16.91 ms            59 QPS
+  batch     8:      18.31 ms           437 QPS
+  batch    32:      42.67 ms           750 QPS
+  batch   128:      64.00 ms         2,000 QPS
+  batch   512:     270.40 ms         1,893 QPS
+  batch  1024:     561.60 ms         1,823 QPS
+  batch  4096:    2649.08 ms         1,546 QPS
+cpu on Intel(R) Core(TM) Ultra 7 256V, 8 threads: recall vs cpu 1.0000
+  batch     1:      18.96 ms            53 QPS
+  batch     8:      31.29 ms           256 QPS
+  batch    32:      78.27 ms           409 QPS
+  batch   128:     267.35 ms           479 QPS
+  batch   512:    1098.89 ms           466 QPS
+  batch  1024:    2174.06 ms           471 QPS
+wrote results/opencl/intel_arc140v_run3.csv
+== kernel ablation
+data: 1,000,000 x 384 (ip), queries: 1,024
+opencl-naive on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:     106.96 ms             9 QPS
+  batch     4:     415.90 ms            10 QPS
+  batch     8:     837.03 ms            10 QPS
+  batch    16:    1666.83 ms            10 QPS
+  batch    32:    3331.65 ms            10 QPS
+  batch   128:   14218.12 ms             9 QPS
+opencl-skinny on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      18.43 ms            54 QPS
+  batch     4:      19.13 ms           209 QPS
+  batch     8:      21.40 ms           374 QPS
+  batch    16:      39.87 ms           401 QPS
+  batch    32:      77.18 ms           415 QPS
+  batch   128:     315.15 ms           406 QPS
+opencl-tiled on Intel(R) Graphics [0x64a0], sub-groups: recall vs cpu 1.0000
+  batch     1:      41.80 ms            24 QPS
+  batch     4:      44.00 ms            91 QPS
+  batch     8:      43.73 ms           183 QPS
+  batch    16:      43.02 ms           372 QPS
+  batch    32:      45.92 ms           697 QPS
+  batch   128:      68.31 ms         1,874 QPS
+  batch  1024:     606.29 ms         1,689 QPS
+wrote results/opencl/intel_arc140v_methods.csv
+== per-kernel profile
+Intel(R) Graphics [0x64a0], sub-groups: True, method auto
+  batch     1: wall    19.89 ms | select 0.63, skinny 17.38 | other 1.88
+  batch     8: wall    21.74 ms | select 1.71, skinny 18.03 | other 2.01
+  batch    16: wall    38.40 ms | select 2.47, skinny 33.39 | other 2.53
+  batch    32: wall    46.93 ms | select 3.72, tiled 41.27 | other 1.94
+  batch   128: wall    72.12 ms | select 11.77, tiled 58.39 | other 1.96
+  batch   512: wall   295.90 ms | select 57.31, tiled 236.38 | other 2.20
+  batch  1024: wall   620.54 ms | select 145.27, tiled 477.54 | other -2.27
+  batch  4096: wall  2801.61 ms | select 1015.24, tiled 1781.22 | other 5.15
+wrote results/opencl/intel_arc140v_profile.csv
+== roofline
+Ceilings (Intel(R) Graphics [0x64a0]): 104 GB/s read, 3,648 GFLOP/s FP32 FMA; ridge point 35 FLOP/byte.
+
+| backend | batch | kernel | ms | queries/s | data passes | FLOP/byte | GB/s streamed | GFLOP/s | bound by | % of that ceiling | distance kernel (ms) | top-k (ms) | distance kernel alone: % of ceiling |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| opencl | 1 | skinny | 18.1 | 55 | 1 | 0.5 | 85 | 42 | memory | 82% | 17.4 | 0.6 | 85% |
+| opencl | 8 | skinny | 18.9 | 424 | 1 | 4.0 | 81 | 326 | memory | 79% | 18.0 | 1.7 | 82% |
+| opencl | 32 | tiled | 42.7 | 750 | 1 | 16.0 | 36 | 576 | memory | 35% | 41.3 | 3.7 | 36% |
+| opencl | 128 | tiled | 64.3 | 1,990 | 1 | 64.0 | 24 | 1,529 | compute | 42% | 58.4 | 11.8 | 46% |
+| opencl | 512 | tiled | 274.8 | 1,863 | 4 | 64.0 | 22 | 1,431 | compute | 39% | 236.4 | 57.3 | 46% |
+| opencl | 1024 | tiled | 570.1 | 1,796 | 8 | 64.0 | 22 | 1,379 | compute | 38% | 477.5 | 145.3 | 45% |
+| opencl | 4096 | tiled | 2666.7 | 1,536 | 32 | 64.0 | 18 | 1,180 | compute | 32% | 1781.2 | 1015.2 | 48% |
+| opencl-nosg | 1 | skinny | 16.6 | 60 | 1 | 0.5 | 92 | 46 | memory | 89% | | | |
+| opencl-nosg | 8 | skinny | 23.8 | 336 | 1 | 4.0 | 65 | 258 | memory | 62% | | | |
+| opencl-nosg | 32 | tiled | 42.7 | 750 | 1 | 16.0 | 36 | 576 | memory | 35% | | | |
+| opencl-nosg | 128 | tiled | 63.1 | 2,030 | 1 | 64.0 | 24 | 1,559 | compute | 43% | | | |
+| opencl-nosg | 512 | tiled | 265.4 | 1,929 | 4 | 64.0 | 23 | 1,481 | compute | 41% | | | |
+| opencl-nosg | 1024 | tiled | 552.3 | 1,854 | 8 | 64.0 | 22 | 1,424 | compute | 39% | | | |
+| opencl-nosg | 4096 | tiled | 2611.7 | 1,568 | 32 | 64.0 | 19 | 1,204 | compute | 33% | | | |
+== finished 2026-10-08T13:01:39-07:00

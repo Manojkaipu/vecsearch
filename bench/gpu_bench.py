@@ -1,7 +1,11 @@
-"""Exact (brute-force) k-NN throughput: CPU vs CUDA vs FAISS, across batch sizes.
+"""Exact (brute-force) k-NN throughput: CPU vs CUDA vs OpenCL vs FAISS, across batch sizes.
 
     python bench/gpu_bench.py --backends cpu,cuda,faiss-gpu --out results/gpu/colab_t4.csv
     python bench/gpu_bench.py --backends cpu,faiss-cpu --out results/gpu/laptop.csv
+    python bench/gpu_bench.py --backends opencl --opencl-device Intel --out results/opencl/intel_arc140v.csv
+    python bench/gpu_bench.py --backends cuda,opencl --opencl-device Tesla --out results/opencl/t4.csv
+
+opencl-nosg is opencl with the sub-group reductions replaced by the local-memory fallback.
 
 Brute-force cost doesn't depend on the values, so the data is random unit vectors with the
 tweet benchmark's shape (1M x 384, cosine). Every timed search includes copying the queries
@@ -19,7 +23,8 @@ import numpy as np
 
 import vecsearch as vs
 
-BACKENDS = ["cpu", "cuda", "cuda-naive", "cuda-skinny", "cuda-tiled", "faiss-gpu", "faiss-cpu"]
+BACKENDS = ["cpu", "cuda", "cuda-naive", "cuda-skinny", "cuda-tiled", "opencl", "opencl-naive",
+            "opencl-skinny", "opencl-tiled", "opencl-nosg", "faiss-gpu", "faiss-cpu"]
 
 
 def unit_vectors(n, d, seed):
@@ -48,7 +53,22 @@ def gpu_name():
         return "gpu"
 
 
-def make_backend(name, xb, metric, threads):
+def opencl_device(spec):
+    """Index into vs.opencl_devices() of the first device whose "platform / name" contains spec
+    (case-insensitive), or the spec itself if it is a number."""
+    devs = vs.opencl_devices()
+    if not devs:
+        raise SystemExit("no OpenCL devices (is vecsearch built with -DVECSEARCH_BUILD_OPENCL=ON?)")
+    if spec.isdigit():
+        return int(spec)
+    for i, d in enumerate(devs):
+        if spec.lower() in f"{d['platform']} / {d['name']}".lower():
+            return i
+    raise SystemExit(f"no OpenCL device matches {spec!r}; have: " +
+                     "; ".join(f"{i}: {d['platform']} / {d['name']}" for i, d in enumerate(devs)))
+
+
+def make_backend(name, xb, metric, threads, opencl_dev="0"):
     """Returns (search(q, k) -> ids, device description)."""
     d = xb.shape[1]
     if name == "cpu":
@@ -60,6 +80,14 @@ def make_backend(name, xb, metric, threads):
         idx.add(xb)
         method = name.split("-", 1)[1] if "-" in name else "auto"
         return (lambda q, k: idx.search(q, k, method=method)[0]), gpu_name()
+    if name.startswith("opencl"):
+        dev = opencl_device(opencl_dev)
+        sg = False if name == "opencl-nosg" else None
+        idx = vs.OpenCLBruteForceIndex(d, metric, device=dev, subgroups=sg)
+        idx.add(xb)
+        method = name.split("-", 1)[1] if name.split("-", 1)[-1] in ("naive", "skinny", "tiled") else "auto"
+        desc = idx.device_name + (", sub-groups" if idx.uses_subgroups else ", local-memory reduction")
+        return (lambda q, k: idx.search(q, k, method=method)[0]), desc
     import faiss
     flat = faiss.IndexFlatL2(d) if metric == "l2" else faiss.IndexFlatIP(d)
     if name == "faiss-gpu":
@@ -93,7 +121,9 @@ def main():
     ap.add_argument("--metric", default="ip", choices=["ip", "l2"])
     ap.add_argument("--k", type=int, default=10)
     ap.add_argument("--batches", default="1,8,32,128,512,1024,4096")
-    ap.add_argument("--max-batch", default="cpu=1024,faiss-cpu=1024,cuda-naive=1024",
+    ap.add_argument("--opencl-device", default="0",
+                    help="OpenCL device: an index into vs.opencl_devices(), or part of its platform / name")
+    ap.add_argument("--max-batch", default="cpu=1024,faiss-cpu=1024,cuda-naive=1024,opencl-naive=1024",
                     help="largest batch per backend (slow ones), e.g. cpu=1024")
     ap.add_argument("--threads", type=int, default=os.cpu_count())
     ap.add_argument("--min-time", type=float, default=1.0)
@@ -123,7 +153,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
         for name in backends:
-            search, device = make_backend(name, xb, args.metric, args.threads)
+            search, device = make_backend(name, xb, args.metric, args.threads, args.opencl_device)
             recall = vs.recall_at_k(search(xq[:args.check], args.k), truth, args.k)
             print(f"{name} on {device}: recall vs cpu {recall:.4f}", flush=True)
             for b in batches:

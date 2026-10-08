@@ -1,0 +1,21 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,1,18.077,55.3,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,8,18.872,423.9,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,32,42.679,749.8,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,128,64.307,1990.5,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,512,274.789,1863.2,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,1024,570.116,1796.1,1.0
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,4096,2666.727,1536.0,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,1,16.628,60.1,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,8,23.812,336.0,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,32,42.689,749.6,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,128,63.059,2029.8,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,512,265.435,1928.9,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,1024,552.284,1854.1,1.0
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,4096,2611.686,1568.3,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1,19.339,51.7,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,8,33.938,235.7,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,32,79.408,403.0,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,128,283.55,451.4,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,512,1186.096,431.7,1.0
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1024,2445.451,418.7,1.0

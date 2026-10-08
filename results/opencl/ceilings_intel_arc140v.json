@@ -1,0 +1,10 @@
+{
+  "platform": "Intel(R) OpenCL Graphics",
+  "device": "Intel(R) Graphics [0x64a0]",
+  "compute_units": 64,
+  "clock_mhz": 1950,
+  "read_gb_per_s": 103.5,
+  "fma_gflops": 3648.0,
+  "read_bytes": 536870912,
+  "note": "median of 15 runs; simple kernels, not datasheet peaks"
+}

@@ -1,0 +1,21 @@
+backend,device,n,dim,metric,k,batch,ms_per_batch,qps,recall_vs_cpu,runs,ms_min,ms_max
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,1,16.973,58.9,1.0,3,16.914,18.077
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,8,18.43,434.1,1.0,3,18.311,18.872
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,32,42.666,750.0,1.0,3,42.582,42.679
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,128,64.298,1990.7,1.0,3,64.003,64.307
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,512,270.425,1893.3,1.0,3,270.405,274.789
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,1024,567.113,1805.6,1.0,3,561.599,570.116
+opencl,"Intel(R) Graphics [0x64a0], sub-groups",1000000,384,ip,10,4096,2666.727,1536.0,1.0,3,2649.082,2734.532
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,1,16.628,60.1,1.0,1,16.628,16.628
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,8,23.812,336.0,1.0,1,23.812,23.812
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,32,42.689,749.6,1.0,1,42.689,42.689
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,128,63.059,2029.8,1.0,1,63.059,63.059
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,512,265.435,1928.9,1.0,1,265.435,265.435
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,1024,552.284,1854.1,1.0,1,552.284,552.284
+opencl-nosg,"Intel(R) Graphics [0x64a0], local-memory reduction",1000000,384,ip,10,4096,2611.686,1568.3,1.0,1,2611.686,2611.686
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1,19.264,51.9,1.0,3,18.961,19.339
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,8,33.074,241.9,1.0,3,31.293,33.938
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,32,79.408,403.0,1.0,3,78.275,80.055
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,128,267.781,478.0,1.0,3,267.347,283.55
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,512,1098.886,465.9,1.0,3,1064.992,1186.096
+cpu,"Intel(R) Core(TM) Ultra 7 256V, 8 threads",1000000,384,ip,10,1024,2174.059,471.0,1.0,3,2160.75,2445.451

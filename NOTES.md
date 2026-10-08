@@ -114,3 +114,145 @@ two-step `add` (buffer growth keeps the first part), and the sub-group and fallb
 
 CI: new `opencl` job in `.github/workflows/ci.yml` installs `pocl-opencl-icd`, builds with
 `-DVECSEARCH_BUILD_OPENCL=ON`, runs the GoogleTest OpenCL tests and the full pytest suite.
+
+## Step 4: OpenVINO setup
+
+Environment: a separate WSL venv `/root/ov-venv` (Python 3.12): openvino 2026.4.1, openvino-genai
+2026.4.1, optimum-intel 1.27.0, optimum 2.1.0, nncf 3.4.0, transformers 4.57.6, torch 2.14.1+cpu,
+sentence-transformers 5.7.0. OpenVINO sees the Arc 140V inside WSL:
+
+```
+core.available_devices -> ['CPU', 'GPU']   GPU = Intel(R) Graphics [0x64a0] (iGPU), 64 EUs, arch v20.4.4
+GPU_DEVICE_TOTAL_MEM_SIZE 8469446656       (the same 7.9 GiB the OpenCL runtime reports)
+```
+
+Exports (`bench/openvino/export_models.sh`, which calls `optimum-cli export openvino --weight-format ...`):
+
+| model | fp16 | int8 | int4 |
+|---|---|---|---|
+| all-MiniLM-L6-v2 (22.7M params) | 45.1 MB, 34 s | 22.8 MB, 19 s | 17.9 MB, 19 s |
+
+MiniLM recipes, from NNCF's own statistics line: int8 = `int8_asym, per-channel` on all 39 weight
+tensors; int4 = `int4_asym, group size 128` on 35 of 39 tensors and int8 on the other 4.
+
+| Qwen2.5-1.5B-Instruct (1.54B params) | 3,087 MB, 4 min 15 s | 1,546 MB, 1 min 29 s | 978 MB, 12 min 33 s |
+
+Qwen recipes (NNCF statistics): int8 = `int8_asym, per-channel`. int4 = optimum-intel's default for this
+model, which is **data-aware**: `int4_asym, group size 128` on 173 of 198 weight tensors (90% of the
+ratio-defining parameters), the other 25 kept as int8 per-channel, with AWQ then scale estimation,
+calibrated on wikitext2 (128 samples; 98 s statistics, 130 s AWQ, 200 s scale estimation). So "INT4"
+here means that recipe, not plain round-to-nearest. Peak memory of the INT4 export was 6.1 GB.
+
+Two things that went wrong while exporting Qwen2.5-1.5B-Instruct:
+1. The INT4 export failed with `ImportError: ... get_wikitext2`. optimum-intel's default INT4 recipe for
+   this model is data-aware (it calibrates on wikitext2), and that needs the `datasets` package.
+2. Installing `datasets` pulled in `huggingface-hub` 2.2.0, which breaks transformers 4.57.6
+   (`huggingface-hub>=0.34.0,<1.0 is required`). Pinned `huggingface-hub<1.0` (0.36.2).
+   WSL has 10.7 GB and the support-rag API pod holds 3.6 GB of it, so the INT4 export (calibration pass)
+   ran with under 1 GB free at its worst. It survived.
+
+Evaluation data comes from support-rag: `bench/openvino/export_support_rag.py` writes one JSON bundle
+(96 approved questions, 512 corpus chunks, and for each of the 86 stored answers that the verifier
+actually checked: the exact prompt Agent.verify built and the original verdict). 7 of those 86 were
+final verdicts of "unsupported". The other 10 of the 96 have no verdict to compare with: 8 were
+"the history doesn't answer this" submissions with no citations (support-rag accepts those without
+calling the verifier), and 2 never produced an answer (they ran out of turns).
+The bundle stays in `data/` (gitignored): the conversations are tweets from the Kaggle dataset.
+
+## Step 3: benchmark on the Intel Arc 140V
+
+All on AC power, WSL2, Intel NEO 26.05 OpenCL driver, 1M x 384 random unit vectors, inner product,
+k=10, every timed call includes copying queries in and results out. Same sweep and same
+`bench/gpu_bench.py` as the CUDA results. Recall vs the CPU index is 1.0000 in every row.
+
+```
+python bench/gpu_bench.py --backends opencl,opencl-nosg,cpu --opencl-device Intel --out results/opencl/intel_arc140v.csv
+python bench/gpu_bench.py --backends opencl,cpu --opencl-device Intel --max-batch cpu=1024 --out results/opencl/intel_arc140v_run{2,3}.csv
+python bench/median_runs.py ... --out results/opencl/intel_arc140v_median.csv
+```
+
+Queries per second, median of 3 full sweeps (`results/opencl/intel_arc140v_median.csv`):
+
+| | 1 | 8 | 32 | 128 | 512 | 1024 | 4096 |
+|---|---|---|---|---|---|---|---|
+| **OpenCL, Arc 140V** | 59 | 434 | 750 | 1,991 | 1,893 | 1,806 | 1,536 |
+| AVX2 CPU index, same laptop, 8 threads | 52 | 242 | 403 | 478 | 466 | 471 | — |
+| OpenCL speedup over that CPU | 1.1x | 1.8x | 1.9x | **4.2x** | 4.1x | 3.8x | — |
+| OpenCL without sub-groups (1 run) | 60 | 336 | 750 | 2,030 | 1,929 | 1,854 | 1,568 |
+| *for context, from the CUDA README: CUDA, Colab T4* | *159* | *824* | *1,253* | *3,691* | *3,530* | *3,358* | *2,897* |
+
+Run-to-run spread of the OpenCL rows across the three sweeps (max-min over the median) is 7% at batch 1
+and under 3.5% for batch 8-4096. The CPU baseline on the same days is 6-26% above the one in the CUDA
+README table (52 vs 49 QPS at batch 1, 478 vs 397 at batch 128), so these speedups use the faster,
+same-day baseline.
+
+**Cost of portability on the same T4: not measured.** The T4 is a Colab GPU and I can't run Colab
+from here. `bench/opencl_colab.ipynb` builds both backends on a T4, runs the OpenCL tests there, and
+times `cuda`, `opencl`, `opencl-nosg` and the three kernels on the same GPU. It needs someone to run it
+and send back `opencl_t4_results.zip`. The T4 row above is the CUDA README's, on different hardware,
+and says nothing about portability cost.
+
+### Memory-bound or compute-bound
+
+Ceilings on this GPU, measured with plain OpenCL kernels (`bench/opencl_roofline.py`,
+`results/opencl/ceilings_intel_arc140v.json`): **103.5 GB/s** streaming read (76% of the 136.5 GB/s that
+LPDDR5X-8533 on a 128-bit bus gives on paper) and **3,648 GFLOP/s** FP32 FMA (91% of the 3,994
+that 64 EUs x 16 lanes x 2 x 1.95 GHz gives). Ridge point 35 FLOP/byte.
+
+One mistake worth recording: my first FMA kernel used float4 chains and measured 1,316 GFLOP/s. The
+tiled kernel then measured 1,400 GFLOP/s, above the "ceiling", which is how I knew the ceiling was
+wrong. Intel's compiler turns that float4 loop into code about 2.8x slower than the same loop on scalar
+floats (1.3 vs 3.6 TFLOP/s). A variant I tried first also returned only lane 0, so the compiler deleted
+the other lanes and reported 10-27 TFLOP/s, which is impossible. Only the scalar, every-chain-feeds-the-result
+kernel is used now.
+
+With OpenCL event profiling (`VECSEARCH_OPENCL_PROFILE=1`, `bench/opencl_profile.py`, measured after a
+3 minute idle cool-down) and `bench/roofline.py`:
+
+| batch | kernel | ms (wall) | distance kernel | top-k | bound by | distance kernel at |
+|---|---|---|---|---|---|---|
+| 1 | skinny | 17.0 | 15.4 ms | 0.6 ms | memory | 96% of read bandwidth (100 GB/s) |
+| 8 | skinny | 18.4 | 15.8 ms | 1.7 ms | memory | 94% (97 GB/s) |
+| 32 | tiled | 42.7 | 38.9 ms | 3.7 ms | compute | 69% of FP32 peak, on 128-row padded tiles |
+| 128 | tiled | 64.3 | 53.9 ms | 11.0 ms | compute | 50% (1.8 TFLOP/s) |
+| 512 | tiled | 270.4 | 225.0 ms | 54.6 ms | compute | 48% |
+| 1024 | tiled | 567.1 | 444.0 ms | 134.8 ms | compute | 49% |
+| 4096 | tiled | 2,666.7 | 1,751.2 ms | 983.9 ms | compute | 49% |
+
+* Batches up to 16 are **memory-bound**: the skinny kernel streams the 1.5 GB of vectors at 94-96% of
+  the measured read ceiling, so there is little left to gain from the kernel. The other 9-14% of the wall
+  time is the top-k select and the copies.
+* Batches of 32 and up are **compute-bound** (64 FLOP per byte streamed, far past the ridge point), but
+  the tiled kernel reaches only about half of the FP32 peak. For scale, the CUDA README reports 2.8 TFLOP/s
+  end to end for its tiled kernel at batch 128 on a T4, whose FP32 peak on paper is 8.1 (about 35%; an
+  end-to-end figure against a datasheet peak, so not directly comparable with the 50% above).
+* **The top-k select is the weak spot at large batches**: 17% of the time at batch 128, 36% at batch
+  4096, where it reads the distance block at about 17 GB/s against a 104 GB/s ceiling. A select fused into
+  the tiled kernel, or a better select, is where the next speed-up is, not the matrix multiply.
+* Sub-groups vs the local-memory fallback: the sub-group version is 29% faster at batch 8 (434 vs 336
+  QPS) and the fallback is 1-3% ahead everywhere else (one run each, so that is inside the noise).
+
+Kernel ablation (cool run, `results/opencl/intel_arc140v_methods.csv`), queries per second:
+
+| kernel | 1 | 4 | 8 | 16 | 32 | 128 | 1024 |
+|---|---|---|---|---|---|---|---|
+| naive | 6 | 6 | 6 | 6 | 6 | 6 | — |
+| skinny | 59 | 224 | 437 | 466 | 482 | 490 | — |
+| tiled | 27 | 104 | 204 | 393 | 732 | 1,938 | 1,764 |
+
+Skinny wins up to 16 queries and tiled from 32, so `auto`'s switch at 16 (inherited from the T4) is right
+on this GPU too; the crossover is between 16 (skinny 466 vs tiled 393) and 32 (482 vs 732).
+
+**The naive kernel is not repeatable here.** Three runs of the same code gave 14, 9 and 6 QPS (71, 107
+and 172 ms per query), each slower than the one before, while skinny and tiled moved by under 10%.
+Its reads are uncoalesced (neighbouring work-items are 1.5 KB apart), so it is the kernel most exposed to
+whatever the memory system is doing (page-table or TLB behaviour on shared memory is my guess; I did not
+isolate it). Treat it as "6-14 QPS, 4-10x slower than skinny at batch 1", not as a number.
+
+Variance and thermals: the iGPU and the CPU share one power and thermal budget. The profile and the
+ablation above were re-run after a 3 minute idle cool-down, with no CPU benchmark before them. For skinny
+and tiled the earlier runs, which came right after 8-thread CPU baselines, were 3-8% slower than the cool
+ones; the naive kernel did not follow that pattern (its cool run was its slowest). The main-sweep OpenCL
+rows are the median of three.
+Earlier in the session (on battery) a 100k-vector smoke test gave a 1.24 TFLOP/s tiled rate, which is
+why the sweep waited for AC.
