@@ -2,13 +2,15 @@
 import numpy as np
 
 from . import _vecsearch
-from ._vecsearch import BM25Index, BruteForceIndex, HNSWIndex, cuda_available
+from ._vecsearch import (BM25Index, BruteForceIndex, HNSWIndex, cuda_available, opencl_available,
+                         opencl_devices)
 
-# Present only in builds with -DVECSEARCH_BUILD_CUDA=ON.
+# Present only in builds with -DVECSEARCH_BUILD_CUDA=ON / -DVECSEARCH_BUILD_OPENCL=ON.
 GpuBruteForceIndex = getattr(_vecsearch, "GpuBruteForceIndex", None)
+OpenCLBruteForceIndex = getattr(_vecsearch, "OpenCLBruteForceIndex", None)
 
-__all__ = ["HNSWIndex", "BruteForceIndex", "GpuBruteForceIndex", "BM25Index", "cuda_available",
-           "normalize", "recall_at_k", "rrf"]
+__all__ = ["HNSWIndex", "BruteForceIndex", "GpuBruteForceIndex", "OpenCLBruteForceIndex", "BM25Index",
+           "cuda_available", "opencl_available", "opencl_devices", "normalize", "recall_at_k", "rrf"]
 __version__ = "0.1.0"
 
 

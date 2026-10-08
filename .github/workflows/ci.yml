@@ -64,6 +64,34 @@ jobs:
           python3 -c "import vecsearch as vs; assert vs.GpuBruteForceIndex is not None; assert not vs.cuda_available()"
           python3 -m pytest tests/python -q
 
+  # The OpenCL kernels run on POCL, an open-source OpenCL that executes them on the runner's CPU,
+  # so every commit checks the GPU code against the CPU index without needing a GPU.
+  opencl:
+    name: OpenCL on POCL (CPU)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install POCL and the OpenCL headers
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq pocl-opencl-icd ocl-icd-opencl-dev opencl-headers clinfo
+          clinfo -l
+          clinfo | grep -Ei "device version|sub-group|max work group size|max memory allocation" || true
+      - name: C++ tests (GoogleTest)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DVECSEARCH_ARCH=x86-64-v3 -DVECSEARCH_BUILD_OPENCL=ON
+          cmake --build build -j
+          ./build/vecsearch_tests --gtest_filter='*OpenCL*' --gtest_brief=1
+          ctest --test-dir build --output-on-failure -E OpenCL -j2
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: Python tests (pytest)
+        env: { CMAKE_ARGS: "-DVECSEARCH_ARCH=x86-64-v3 -DVECSEARCH_BUILD_OPENCL=ON" }
+        run: |
+          pip install . pytest
+          python -c "import vecsearch as vs; print(vs.opencl_devices()); assert vs.opencl_available()"
+          python -m pytest tests/python -q
+
   docker:
     runs-on: ubuntu-24.04
     needs: [cpp, python]

@@ -12,6 +12,9 @@
 #ifdef VECSEARCH_HAS_CUDA
 #include "vecsearch/gpu_brute_force.h"
 #endif
+#ifdef VECSEARCH_HAS_OPENCL
+#include "vecsearch/opencl_brute_force.h"
+#endif
 
 namespace py = pybind11;
 using namespace vecsearch;
@@ -54,6 +57,16 @@ static py::array_t<int64_t> ids_to_int64(const py::array_t<uint32_t>& ids) {
   for (py::ssize_t i = 0; i < ids.size(); ++i) dst[i] = src[i] == 0xFFFFFFFFu ? -1 : int64_t(src[i]);
   return out;
 }
+
+#if defined(VECSEARCH_HAS_CUDA) || defined(VECSEARCH_HAS_OPENCL)
+static GpuMethod parse_gpu_method(const std::string& method) {
+  if (method == "auto") return GpuMethod::Auto;
+  if (method == "naive") return GpuMethod::Naive;
+  if (method == "skinny") return GpuMethod::Skinny;
+  if (method == "tiled") return GpuMethod::Tiled;
+  throw std::invalid_argument("method must be 'auto', 'naive', 'skinny' or 'tiled'");
+}
+#endif
 
 PYBIND11_MODULE(_vecsearch, m) {
   m.doc() = "HNSW approximate nearest-neighbor search in C++";
@@ -165,12 +178,7 @@ PYBIND11_MODULE(_vecsearch, m) {
       .def(
           "search",
           [](GpuBruteForceIndex& self, FloatArray q, size_t k, const std::string& method) {
-            GpuMethod gm;
-            if (method == "auto") gm = GpuMethod::Auto;
-            else if (method == "naive") gm = GpuMethod::Naive;
-            else if (method == "skinny") gm = GpuMethod::Skinny;
-            else if (method == "tiled") gm = GpuMethod::Tiled;
-            else throw std::invalid_argument("method must be 'auto', 'naive', 'skinny' or 'tiled'");
+            const GpuMethod gm = parse_gpu_method(method);
             if (q.ndim() == 1) q = q.reshape({py::ssize_t(1), q.shape(0)});
             check_2d(q, self.dim());
             const size_t nq = q.shape(0);
@@ -195,6 +203,75 @@ PYBIND11_MODULE(_vecsearch, m) {
     return false;
 #endif
   }, "True if built with CUDA and a GPU is visible.");
+
+#ifdef VECSEARCH_HAS_OPENCL
+  py::class_<OpenCLBruteForceIndex>(m, "OpenCLBruteForceIndex")
+      .def(py::init([](size_t dim, const std::string& metric, int device, const py::object& subgroups) {
+             const int sg = subgroups.is_none() ? -1 : (subgroups.cast<bool>() ? 1 : 0);
+             return std::make_unique<OpenCLBruteForceIndex>(dim, parse_metric(metric), device, sg);
+           }),
+           py::arg("dim"), py::arg("metric") = "l2", py::arg("device") = 0, py::arg("subgroups") = py::none(),
+           "device indexes opencl_devices() (GPUs first). subgroups: None = use sub-group reductions\n"
+           "if the device has them, True = require them, False = local-memory fallback.")
+      .def(
+          "add",
+          [](OpenCLBruteForceIndex& self, FloatArray x) {
+            check_2d(x, self.dim());
+            py::gil_scoped_release nogil;
+            self.add(x.data(), x.shape(0));
+          },
+          py::arg("x"))
+      .def(
+          "search",
+          [](OpenCLBruteForceIndex& self, FloatArray q, size_t k, const std::string& method) {
+            const GpuMethod gm = parse_gpu_method(method);
+            if (q.ndim() == 1) q = q.reshape({py::ssize_t(1), q.shape(0)});
+            check_2d(q, self.dim());
+            const size_t nq = q.shape(0);
+            py::array_t<uint32_t> ids({nq, k});
+            py::array_t<float> dists({nq, k});
+            {
+              py::gil_scoped_release nogil;
+              self.search(q.data(), nq, k, ids.mutable_data(), dists.mutable_data(), gm);
+            }
+            return py::make_tuple(ids_to_int64(ids), dists);
+          },
+          py::arg("queries"), py::arg("k") = 10, py::arg("method") = "auto",
+          "Exact top-k on an OpenCL device, k <= 128. Returns (ids[int64, nq x k], distances[float32, nq x k]).")
+      .def_property_readonly("dim", &OpenCLBruteForceIndex::dim)
+      .def_property_readonly("uses_subgroups", &OpenCLBruteForceIndex::uses_subgroups)
+      .def_property_readonly("device_name", [](const OpenCLBruteForceIndex& self) { return self.device_info().name; })
+      .def("__len__", &OpenCLBruteForceIndex::size);
+#endif
+
+  m.def("opencl_available", [] {
+#ifdef VECSEARCH_HAS_OPENCL
+    return opencl_available();
+#else
+    return false;
+#endif
+  }, "True if built with OpenCL and at least one OpenCL device is visible.");
+
+  m.def("opencl_devices", [] {
+    py::list out;
+#ifdef VECSEARCH_HAS_OPENCL
+    for (const OpenCLDeviceInfo& d : opencl_devices()) {
+      py::dict e;
+      e["platform"] = d.platform;
+      e["name"] = d.name;
+      e["version"] = d.version;
+      e["gpu"] = d.gpu;
+      e["subgroups"] = d.subgroups;
+      e["compute_units"] = d.compute_units;
+      e["global_mem"] = d.global_mem;
+      e["max_alloc"] = d.max_alloc;
+      e["local_mem"] = d.local_mem;
+      e["max_work_group"] = d.max_work_group;
+      out.append(std::move(e));
+    }
+#endif
+    return out;
+  }, "OpenCL devices on this machine, GPUs first; OpenCLBruteForceIndex's `device` indexes this list.");
 
   py::class_<BM25Index>(m, "BM25Index")
       .def(py::init([](float k1, float b, bool remove_stopwords) {
