@@ -255,7 +255,7 @@ def main():
         except Exception as e:  # a crashed stage is a failure, not a pass
             rep.errors.append(f"stage {s} crashed: {type(e).__name__}: {e}")
     git = run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT).stdout.strip()
-    meta = {"commit": git, "stages": ", ".join(stages), "thresholds": f"{Path(args.thresholds).name} ({th.get('basis', '')})",
+    meta = {"commit": git or "unknown (not a git checkout)", "stages": ", ".join(stages), "thresholds": f"{Path(args.thresholds).name} ({th.get('basis', '')})",
             "wall time": f"{time.time() - t0:.0f} s"}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(rep.markdown(meta), encoding="utf-8")
